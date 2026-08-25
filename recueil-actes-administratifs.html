@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Recueil des actes administratifs — Préfecture RP de Martinique</title>
+<style>
+  @font-face {
+    font-family: "Marianne";
+    src: url("fonts/Marianne-Light.woff2") format("woff2");
+    font-weight: 300;
+  }
+  @font-face {
+    font-family: "Marianne";
+    src: url("fonts/Marianne-Regular.woff2") format("woff2");
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: "Marianne";
+    src: url("fonts/Marianne-Medium.woff2") format("woff2");
+    font-weight: 500;
+  }
+  @font-face {
+    font-family: "Marianne";
+    src: url("fonts/Marianne-Bold.woff2") format("woff2");
+    font-weight: 700;
+  }
+
+  :root{
+    --accent-dark: #1212b3;
+    --accent-hover: #3a3aff;
+    --gris-texte: #3a3a3a;
+    --gris-bordure: #e2e2e2;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Marianne", Arial, sans-serif;
+    color: #161616;
+    background: #fff;
+  }
+
+  .page-header {
+    background: #161616;
+    color: #fff;
+    padding: 36px 24px;
+  }
+  .page-header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .breadcrumb {
+    font-size: 13px;
+    color: #b3b3b3;
+    margin-bottom: 10px;
+  }
+  .breadcrumb a { color: #b3b3b3; }
+  .page-header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  main > p.intro {
+    color: var(--gris-texte);
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 640px;
+    margin-bottom: 40px;
+  }
+
+  /* ---- un bloc par jour ---- */
+  .jour-bloc {
+    padding-bottom: 32px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid var(--gris-bordure);
+  }
+  .jour-bloc h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 18px;
+  }
+
+  /* ---- un bloc par service au sein d'un jour ---- */
+  .service-bloc {
+    margin-bottom: 18px;
+  }
+  .service-nom {
+    font-size: 15.5px;
+    font-weight: 700;
+    margin: 0 0 4px;
+  }
+  .service-actes {
+    margin: 0;
+    padding: 0;
+    color: var(--gris-texte);
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  /* =========================================
+     lien de téléchargement — structure DSFR (fr-link--download)
+     Un seul par jour : le PDF complet du recueil du jour
+  ========================================== */
+  .fr-link--download {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    color: var(--accent-dark);
+    text-decoration: underline;
+    font-size: 15.5px;
+    font-weight: 500;
+  }
+  .fr-link--download::after {
+    content: "⭳";
+    font-size: 16px;
+  }
+  .fr-link--download:hover,
+  .fr-link--download:focus-visible {
+    color: var(--accent-hover);
+  }
+  .fr-link--download:focus-visible {
+    outline: 2px solid var(--accent-dark);
+    outline-offset: 2px;
+  }
+  .fr-link__detail {
+    display: block;
+    margin-top: 4px;
+    font-size: 13px;
+    font-weight: 400;
+    color: #666;
+    text-decoration: none;
+  }
+
+  .actes-empty {
+    color: #888;
+    font-weight: 300;
+    font-size: 14px;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="breadcrumb"><a href="index.html">Accueil</a> › <a href="index.html">Publications</a> › Recueil des actes administratifs</div>
+      <h1>Recueil des actes administratifs</h1>
+    </div>
+  </div>
+
+  <main>
+    <p class="intro">
+      Retrouvez ici le recueil des actes administratifs de la préfecture RP de Martinique, publié
+      quotidiennement. Chaque jour, un PDF unique regroupe l'ensemble des actes signés par les
+      différents services.
+    </p>
+
+    <!-- Le contenu s'affiche ici, généré depuis la liste ci-dessous -->
+    <div id="recueil-container"></div>
+  </main>
+
+  <script>
+    /* =====================================================================
+       RECUEIL DES ACTES ADMINISTRATIFS
+       -----------------------------------------------------------------
+       Un objet = un jour de publication. Pour AJOUTER un jour : copie un
+       objet { ... } et modifie ses champs. Pour EN RETIRER un : supprime
+       son objet. L'ordre d'écriture ci-dessous est l'ordre d'affichage
+       (mets le plus récent en premier).
+
+       Structure d'un jour :
+         date     -> le titre affiché (ex: "Le 24 août 2026")
+         services -> liste des bureaux/services ayant publié ce jour-là
+           - nom   -> nom du service (affiché en gras)
+           - actes -> liste de textes, un par acte (numéro, objet, pages)
+         telechargement -> LE seul PDF du jour, qui regroupe tous les actes
+           - titre   -> nom du fichier affiché dans le lien
+           - fichier -> chemin réel vers le PDF sur le site
+           - taille  -> ex: "3,74 Mb"
+           - date    -> date affichée à côté (ex: "24/08/2026")
+    ===================================================================== */
+    const recueil = [
+      {
+        date: "Le 24 août 2026",
+        services: [
+          {
+            nom: "Préfecture de la Martinique / Secrétariat général commun - bureau des affaires juridiques",
+            actes: [
+              "R02-2026-08-24-00002 - Arrêté portant délégation de signature à Mme Cécile LALOUX, Rectrice de la région académique de Martinique (8 pages) Page 3",
+              "R02-2026-08-24-00001 - Arrêté portant délégation de signature à Monsieur Philémon PERROT, directeur de cabinet de préfet de la Martinique (2 pages) Page 12"
+            ]
+          }
+        ],
+        telechargement: {
+          titre: "recueil-r02-2026-265-recueil-des-actes-administratifs",
+          fichier: "arretes/recueil-r02-2026-265.pdf",
+          taille: "3,74 Mb",
+          date: "24/08/2026"
+        }
+      },
+      {
+        date: "Le 22 août 2026",
+        services: [
+          {
+            nom: "ARS / Direction de l'offre de soins et de l'autonomie (DOSA)",
+            actes: [
+              "R02-2026-08-14-00002 - Arrêté DGARS n°227 du 14 août 2026 portant actualisation des caractéristiques substentielles FINESS de l'IME Georges BUISSON (3 pages) Page 4",
+              "R02-2026-08-18-00001 - ARRETE N° 245 du 18 août 2026 portant attribution de nouvelles autorisations de mise en service de véhicules de transport sanitaire (2 pages) Page 8",
+              "R02-2026-08-20-00005 - ARRETE n° 247 du 20 août 2026 portant modification de l'arrêté n° 226 du 13 août 2026 portant agrément de la SASU MAREVA (2 pages) Page 11"
+            ]
+          }
+        ],
+        telechargement: {
+          titre: "recueil-r02-2026-263-recueil-des-actes-administratifs",
+          fichier: "arretes/recueil-r02-2026-263.pdf",
+          taille: "2,91 Mb",
+          date: "22/08/2026"
+        }
+      }
+    ];
+    /* ===================================================================== */
+
+    // --- à partir d'ici : génération automatique, pas besoin d'y toucher ---
+
+    function afficherRecueil() {
+      const container = document.getElementById('recueil-container');
+
+      if (recueil.length === 0) {
+        container.innerHTML = '<p class="actes-empty">Aucun acte administratif publié pour le moment.</p>';
+        return;
+      }
+
+      container.innerHTML = recueil.map(jour => `
+        <section class="jour-bloc">
+          <h2>${jour.date}</h2>
+
+          ${jour.services.map(service => `
+            <div class="service-bloc">
+              <p class="service-nom">${service.nom}</p>
+              <p class="service-actes">
+                ${service.actes.join('<br>')}
+              </p>
+            </div>
+          `).join('')}
+
+          <a download="true" href="${jour.telechargement.fichier}" class="fr-link fr-link--download">
+            Télécharger ${jour.telechargement.titre}
+            <span class="fr-link__detail">PDF - ${jour.telechargement.taille} - ${jour.telechargement.date}</span>
+          </a>
+        </section>
+      `).join('');
+    }
+
+    afficherRecueil();
+  </script>
+
+</body>
+</html>
