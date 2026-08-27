@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Permis de détention d'arme — Préfecture RP de Martinique</title>
+<style>
+  @font-face { font-family: "Marianne"; src: url("fonts/Marianne-Light.woff2") format("woff2"); font-weight: 300; }
+  @font-face { font-family: "Marianne"; src: url("fonts/Marianne-Regular.woff2") format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Marianne"; src: url("fonts/Marianne-Medium.woff2") format("woff2"); font-weight: 500; }
+  @font-face { font-family: "Marianne"; src: url("fonts/Marianne-Bold.woff2") format("woff2"); font-weight: 700; }
+
+  :root{
+    --header-bg: #161616;
+    --accent: #6a6af4;
+    --accent-hover: #8888ff;
+    --accent-dark: #1212b3;
+    --border-dim: #333;
+    --text-dim: #b3b3b3;
+    --gris-texte: #3a3a3a;
+    --gris-bordure: #ccc;
+    --erreur: #ce0500;
+    --succes: #18753c;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Marianne", Arial, sans-serif; color: #161616; background: #fff; }
+
+  /* =========================================
+     EN-TÊTE (identique aux autres pages)
+  ========================================== */
+  .fr-header { background: var(--header-bg); color: #fff; position: sticky; top: 0; z-index: 60; }
+  .fr-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+  .fr-header__body { padding: 18px 0; }
+  .fr-header__body-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  .fr-header__identity { display: flex; align-items: center; gap: 14px; }
+  .logo-placeholder {
+    width: 52px; height: 52px; flex: none; border: 2px dashed var(--border-dim); border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 500; color: var(--text-dim); text-align: center; line-height: 1.2;
+  }
+  .fr-header__brand-link { text-decoration: none; display: block; }
+  .fr-logo { font-size: 20px; font-weight: 700; line-height: 1.25; margin: 0; color: #fff; }
+  .fr-header__actions { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+  .fr-header__tools { display: flex; flex-wrap: wrap; gap: 18px 24px; }
+  .fr-tool-link {
+    display: inline-flex; align-items: center; gap: 7px; color: var(--accent-hover);
+    text-decoration: none; font-size: 14px; font-weight: 500; white-space: nowrap;
+  }
+  .fr-tool-link:hover, .fr-tool-link:focus-visible { text-decoration: underline; }
+  .fr-search-bar { display: flex; align-items: center; flex-wrap: wrap; flex: none; width: 300px; max-width: 100%; }
+  .fr-search-bar .fr-label {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+  .fr-search-bar .fr-input {
+    flex: 1; background: #232323; border: 1px solid var(--border-dim); border-right: none; color: #fff;
+    font-family: "Marianne", Arial, sans-serif; font-weight: 300; font-size: 15px;
+    padding: 10px 14px; border-radius: 3px 0 0 3px;
+  }
+  .fr-search-bar .fr-input::placeholder { color: #8f8f8f; }
+  .fr-search-bar .fr-input:focus { outline: none; border-color: var(--accent); }
+  .fr-search-bar .fr-messages-group { width: 100%; order: 3; font-size: 12.5px; }
+  .fr-search-bar .fr-btn {
+    background: var(--accent); border: none; color: #fff; width: 42px; height: 40px;
+    border-radius: 0 3px 3px 0; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 0; flex: none; transition: background 0.15s ease;
+  }
+  .fr-search-bar .fr-btn::before { content: "🔍"; font-size: 16px; }
+  .fr-search-bar .fr-btn:hover, .fr-search-bar .fr-btn:focus-visible { background: var(--accent-hover); }
+
+  .fr-nav { border-top: 1px solid var(--border-dim); position: relative; }
+  .fr-nav__list { list-style: none; margin: 0 auto; padding: 0 24px; max-width: 1280px; display: flex; flex-wrap: wrap; }
+  .fr-nav__item { position: static; }
+  .fr-nav__btn, .fr-nav__link {
+    font-family: "Marianne", Arial, sans-serif;
+    display: flex; align-items: center; gap: 7px;
+    background: none; border: none; color: #fff; text-decoration: none;
+    font-size: 15px; font-weight: 500; padding: 15px 18px;
+    border-bottom: 3px solid transparent; cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .fr-nav__btn:hover, .fr-nav__btn:focus-visible,
+  .fr-nav__link:hover, .fr-nav__link:focus-visible { border-color: var(--accent); }
+  .fr-nav__btn:focus-visible, .fr-nav__link:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .fr-nav__btn::after { content: "▾"; font-size: 10px; color: var(--text-dim); transition: transform 0.15s ease; }
+  .fr-nav__btn[aria-expanded="true"] { border-color: var(--accent); }
+  .fr-nav__btn[aria-expanded="true"]::after { transform: rotate(180deg); }
+  .fr-collapse.fr-mega-menu {
+    display: none; position: absolute; top: 100%; left: 0; right: 0;
+    background: #fff; color: #161616; box-shadow: 0 16px 32px rgba(0,0,0,0.18); z-index: 30;
+  }
+  .fr-collapse.fr-mega-menu.fr-collapse--expanded { display: block; }
+  .mega-inner { max-width: 1280px; margin: 0 auto; padding: 32px 24px 44px; position: relative; }
+  .fr-btn--close {
+    position: absolute; top: 28px; right: 24px; background: none; border: none; color: var(--accent-dark);
+    font-family: "Marianne", Arial, sans-serif; font-size: 14.5px; font-weight: 500;
+    display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 4px 2px;
+  }
+  .fr-btn--close::after { content: "×"; font-size: 18px; line-height: 1; }
+  .fr-btn--close:hover, .fr-btn--close:focus-visible { color: var(--accent-hover); }
+  .fr-grid-row { display: flex; flex-wrap: wrap; gap: 32px 40px; padding-right: 160px; }
+  .fr-mega-menu__leader { flex: 1 1 260px; max-width: 320px; }
+  .fr-mega-menu__leader .fr-h4 { font-size: 22px; font-weight: 700; margin: 0 0 10px; }
+  .fr-mega-menu__leader p { font-size: 14.5px; font-weight: 300; color: #4a4a4a; line-height: 1.55; margin: 0 0 14px; }
+  .fr-mega-menu__leader .fr-link {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 14.5px; font-weight: 500;
+    color: var(--accent-dark); text-decoration: underline;
+  }
+  .fr-mega-menu__leader .fr-link:hover { color: var(--accent-hover); }
+  .fr-mega-menu__category-col { flex: 1 1 200px; max-width: 260px; }
+  .fr-mega-menu__category { margin: 0 0 12px; padding-bottom: 10px; border-bottom: 1px solid #e2e2e2; }
+  .fr-mega-menu__category .fr-nav__link {
+    color: #161616; font-size: 15px; font-weight: 700; padding: 0; border-bottom: none; display: block;
+  }
+  .fr-mega-menu__category .fr-nav__link:hover { color: var(--accent-dark); }
+  .fr-mega-menu__list { list-style: none; margin: 0; padding: 0; }
+  .fr-mega-menu__list li + li { margin-top: 2px; }
+  .fr-mega-menu__list .fr-nav__link {
+    color: #3a3a3a; font-size: 14.5px; font-weight: 400; padding: 8px 0; border-bottom: none; display: block;
+  }
+  .fr-mega-menu__list .fr-nav__link:hover, .fr-mega-menu__list .fr-nav__link[aria-current="page"] { color: var(--accent-dark); }
+  .fr-mega-menu__list .fr-nav__link[aria-current="page"] { font-weight: 500; }
+  .fr-nav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 25; }
+  .fr-nav-overlay.is-open { display: block; }
+
+  @media (max-width: 640px) {
+    .fr-header__body { padding: 14px 0; }
+    .fr-search-bar { width: 100%; }
+    .fr-header__actions { align-items: flex-start; width: 100%; }
+    .fr-nav__list { padding: 0 8px; overflow-x: auto; }
+    .fr-nav__btn, .fr-nav__link { padding: 13px 12px; white-space: nowrap; }
+    .fr-grid-row { padding-right: 0; flex-direction: column; }
+    .fr-btn--close { position: static; margin-bottom: 20px; }
+  }
+
+  /* =========================================
+     EN-TÊTE DE PAGE
+  ========================================== */
+  .page-header { background: #161616; color: #fff; padding: 36px 24px; }
+  .page-header-inner { max-width: 720px; margin: 0 auto; }
+  .breadcrumb { font-size: 13px; color: #b3b3b3; margin-bottom: 10px; }
+  .breadcrumb a { color: #b3b3b3; }
+  .page-header h1 { font-size: 26px; font-weight: 700; margin: 0 0 8px; }
+  .page-header p { color: #d5d5d5; font-weight: 300; margin: 0; max-width: 560px; }
+
+  /* =========================================
+     FORMULAIRE
+  ========================================== */
+  main { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .required-note { font-size: 13.5px; color: var(--gris-texte); margin-bottom: 28px; }
+  .required-note .star { color: var(--erreur); }
+
+  .fr-fieldset { border: none; padding: 0; margin: 0 0 30px; }
+  .fr-fieldset legend {
+    font-size: 15.5px; font-weight: 700; margin: 0 0 14px; padding: 0;
+  }
+  .fr-fieldset legend .star { color: var(--erreur); }
+
+  .fr-radio-group { display: flex; flex-direction: column; gap: 10px; }
+  .fr-radio-group label {
+    display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 400; cursor: pointer;
+  }
+  .fr-radio-group input[type="radio"] { width: 18px; height: 18px; accent-color: var(--accent-dark); cursor: pointer; }
+
+  .fr-field { margin-bottom: 26px; }
+  .fr-field label {
+    display: block; font-size: 15.5px; font-weight: 700; margin-bottom: 6px;
+  }
+  .fr-field label .star { color: var(--erreur); }
+  .fr-field .fr-hint {
+    display: block; font-size: 13px; font-weight: 300; color: #666; margin-bottom: 8px;
+  }
+  .fr-field input[type="text"],
+  .fr-field input[type="email"],
+  .fr-field input[type="tel"],
+  .fr-field input[type="date"],
+  .fr-field select,
+  .fr-field textarea {
+    width: 100%;
+    font-family: "Marianne", Arial, sans-serif;
+    font-size: 15px;
+    padding: 11px 12px;
+    background: #eee;
+    border: none;
+    border-bottom: 2px solid #161616;
+    border-radius: 2px 2px 0 0;
+  }
+  .fr-field select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, #161616 50%), linear-gradient(135deg, #161616 50%, transparent 50%); background-position: calc(100% - 20px) center, calc(100% - 14px) center; background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; cursor: pointer; }
+  .fr-field textarea { min-height: 140px; resize: vertical; font-family: inherit; }
+  .fr-field input:focus, .fr-field select:focus, .fr-field textarea:focus {
+    outline: 2px solid var(--accent-dark); outline-offset: 1px;
+  }
+
+  .fr-row-2 { display: flex; gap: 16px; }
+  .fr-row-2 .fr-field { flex: 1; margin-bottom: 0; }
+  .fr-field.cp-ville { margin-bottom: 26px; }
+
+  .fr-discord-note {
+    background: #f0f0ff;
+    border-left: 3px solid var(--accent-dark);
+    padding: 14px 16px;
+    font-size: 13.5px;
+    color: var(--gris-texte);
+    margin-bottom: 28px;
+    border-radius: 0 3px 3px 0;
+  }
+
+  .fr-submit-btn {
+    background: var(--accent-dark);
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 13px 28px;
+    font-family: "Marianne", Arial, sans-serif;
+    font-size: 15.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .fr-submit-btn:hover, .fr-submit-btn:focus-visible { background: var(--accent-hover); }
+  .fr-submit-btn:disabled { background: #999; cursor: not-allowed; }
+
+  .form-status {
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-radius: 3px;
+    font-size: 14.5px;
+    display: none;
+  }
+  .form-status.success { display: block; background: #e8f5e9; color: var(--succes); border-left: 3px solid var(--succes); }
+  .form-status.error { display: block; background: #fdeded; color: var(--erreur); border-left: 3px solid var(--erreur); }
+
+  @media (max-width: 560px) {
+    .fr-row-2 { flex-direction: column; gap: 0; }
+    .fr-row-2 .fr-field { margin-bottom: 26px; }
+  }
+</style>
+</head>
+<body>
+
+  <header role="banner" class="fr-header">
+    <div class="fr-header__body">
+      <div class="fr-container">
+        <div class="fr-header__body-row">
+
+          <div class="fr-header__identity">
+            <div class="logo-placeholder" aria-hidden="true">LOGO</div>
+            <a href="index.html" class="fr-header__brand-link" title="Accueil - Préfecture RP de Martinique">
+              <p class="fr-logo">Les services de l'État<br>en Martinique</p>
+            </a>
+          </div>
+
+          <div class="fr-header__actions">
+            <div class="fr-header__tools">
+              <a href="#" class="fr-tool-link">✉ Nous contacter</a>
+              <a href="#" class="fr-tool-link">⚙ Paramètres d'affichage</a>
+            </div>
+            <div class="fr-search-bar" role="search">
+              <label class="fr-label" for="search-input">Rechercher</label>
+              <input class="fr-input" aria-describedby="search-input-messages" placeholder="Rechercher" id="search-input" type="search">
+              <div class="fr-messages-group" id="search-input-messages" aria-live="polite"></div>
+              <button title="Rechercher" type="submit" class="fr-btn">Rechercher</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <nav class="fr-nav" role="navigation" aria-label="Menu principal">
+      <ul class="fr-nav__list">
+
+        <li class="fr-nav__item">
+          <button class="fr-nav__btn" aria-expanded="false" aria-controls="mega-menu-actualites">Actualités</button>
+          <div class="fr-collapse fr-mega-menu" id="mega-menu-actualites" tabindex="-1">
+            <div class="mega-inner">
+              <button class="fr-btn--close" aria-controls="mega-menu-actualites">Fermer</button>
+              <div class="fr-grid-row">
+                <div class="fr-mega-menu__leader">
+                  <h4 class="fr-h4">Actualités</h4>
+                  <p>Toute l'actualité de la préfecture : annonces officielles et informations brèves.</p>
+                  <a class="fr-link" href="#">Voir toute la rubrique →</a>
+                </div>
+                <div class="fr-mega-menu__category-col">
+                  <h5 class="fr-mega-menu__category"><a class="fr-nav__link" href="#">À la une</a></h5>
+                  <ul class="fr-mega-menu__list">
+                    <li><a class="fr-nav__link" href="#">Communiqués de presse</a></li>
+                    <li><a class="fr-nav__link" href="#">Brèves</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="fr-nav__item">
+          <button class="fr-nav__btn" aria-expanded="false" aria-controls="mega-menu-services">Services de l'État</button>
+          <div class="fr-collapse fr-mega-menu" id="mega-menu-services" tabindex="-1">
+            <div class="mega-inner">
+              <button class="fr-btn--close" aria-controls="mega-menu-services">Fermer</button>
+              <div class="fr-grid-row">
+                <div class="fr-mega-menu__leader">
+                  <h4 class="fr-h4">Services de l'État</h4>
+                  <p>Organisation et fonctionnement des services de la préfecture en Martinique.</p>
+                  <a class="fr-link" href="#">Voir toute la rubrique →</a>
+                </div>
+                <div class="fr-mega-menu__category-col">
+                  <h5 class="fr-mega-menu__category"><a class="fr-nav__link" href="#">Nos services</a></h5>
+                  <ul class="fr-mega-menu__list">
+                    <li><a class="fr-nav__link" href="#">Préfecture de la Martinique</a></li>
+                    <li><a class="fr-nav__link" href="#">Organigrammes</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="fr-nav__item">
+          <button class="fr-nav__btn" aria-expanded="false" aria-controls="mega-menu-publications">Publications</button>
+          <div class="fr-collapse fr-mega-menu" id="mega-menu-publications" tabindex="-1">
+            <div class="mega-inner">
+              <button class="fr-btn--close" aria-controls="mega-menu-publications">Fermer</button>
+              <div class="fr-grid-row">
+                <div class="fr-mega-menu__leader">
+                  <h4 class="fr-h4">Publications</h4>
+                  <p>Documents officiels publiés par la préfecture et offres d'emploi.</p>
+                  <a class="fr-link" href="#">Voir toute la rubrique →</a>
+                </div>
+                <div class="fr-mega-menu__category-col">
+                  <h5 class="fr-mega-menu__category"><a class="fr-nav__link" href="#">Documents officiels</a></h5>
+                  <ul class="fr-mega-menu__list">
+                    <li><a class="fr-nav__link" href="recueil-actes-administratifs.html">Recueil des actes administratifs</a></li>
+                    <li><a class="fr-nav__link" href="#">Recrutement</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="fr-nav__item">
+          <button class="fr-nav__btn" aria-expanded="false" aria-controls="mega-menu-demarches">Démarches</button>
+          <div class="fr-collapse fr-mega-menu" id="mega-menu-demarches" tabindex="-1">
+            <div class="mega-inner">
+              <button class="fr-btn--close" aria-controls="mega-menu-demarches">Fermer</button>
+              <div class="fr-grid-row">
+                <div class="fr-mega-menu__leader">
+                  <h4 class="fr-h4">Démarches</h4>
+                  <p>Effectuez vos démarches administratives directement en ligne.</p>
+                  <a class="fr-link" href="#">Voir toute la rubrique →</a>
+                </div>
+                <div class="fr-mega-menu__category-col">
+                  <h5 class="fr-mega-menu__category"><a class="fr-nav__link" href="#">Démarches courantes</a></h5>
+                  <ul class="fr-mega-menu__list">
+                    <li><a class="fr-nav__link" href="demarches-permis-arme.html" aria-current="page">Permis de détention d'arme</a></li>
+                    <li><a class="fr-nav__link" href="#">Manifestation</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+      </ul>
+    </nav>
+  </header>
+
+  <div class="fr-nav-overlay" id="fr-nav-overlay"></div>
+
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="breadcrumb"><a href="index.html">Accueil</a> › <a href="index.html">Démarches</a> › Permis de détention d'arme</div>
+      <h1>Demande de permis de détention d'arme</h1>
+      <p>Remplissez ce formulaire pour effectuer votre demande. Un agent de la préfecture examinera votre dossier et vous répondra sur Discord.</p>
+    </div>
+  </div>
+
+  <main>
+    <p class="required-note">Les champs marqués d'un <span class="star">*</span> sont obligatoires.</p>
+
+    <form id="permis-arme-form" novalidate>
+
+      <fieldset class="fr-fieldset">
+        <legend>Vous êtes <span class="star">*</span></legend>
+        <div class="fr-radio-group">
+          <label><input type="radio" name="profil" value="Un particulier" required> Un particulier</label>
+          <label><input type="radio" name="profil" value="Une collectivité locale"> Une collectivité locale</label>
+          <label><input type="radio" name="profil" value="Une entreprise"> Une entreprise</label>
+          <label><input type="radio" name="profil" value="Autre"> Autre</label>
+        </div>
+      </fieldset>
+
+      <div class="fr-field">
+        <label for="categorie">Veuillez sélectionner la catégorie d'arme <span class="star">*</span></label>
+        <select id="categorie" name="categorie" required>
+          <option value="" selected disabled>Choisissez une catégorie</option>
+          <option value="Catégorie B">Catégorie B — armes soumises à autorisation</option>
+          <option value="Catégorie C">Catégorie C — armes soumises à déclaration</option>
+          <option value="Catégorie D">Catégorie D — armes soumises à enregistrement</option>
+          <option value="Autre">Autre</option>
+        </select>
+      </div>
+
+      <div class="fr-field">
+        <label for="date-naissance">Date de naissance</label>
+        <span class="fr-hint">JJ/MM/AAAA</span>
+        <input type="date" id="date-naissance" name="date_naissance">
+      </div>
+
+      <div class="fr-field">
+        <label for="nom">Nom <span class="star">*</span></label>
+        <input type="text" id="nom" name="nom" required>
+      </div>
+
+      <div class="fr-field">
+        <label for="prenom">Prénom <span class="star">*</span></label>
+        <input type="text" id="prenom" name="prenom" required>
+      </div>
+
+      <div class="fr-field">
+        <label for="email">Adresse électronique <span class="star">*</span></label>
+        <span class="fr-hint">Format attendu : nom@domaine.fr</span>
+        <input type="email" id="email" name="email" required>
+      </div>
+
+      <div class="fr-field">
+        <label for="telephone">Téléphone</label>
+        <span class="fr-hint">Format attendu : 0122334455</span>
+        <input type="tel" id="telephone" name="telephone">
+      </div>
+
+      <div class="fr-field">
+        <label for="adresse">Adresse postale</label>
+        <input type="text" id="adresse" name="adresse">
+      </div>
+
+      <div class="fr-row-2 cp-ville">
+        <div class="fr-field">
+          <label for="code-postal">Code postal</label>
+          <input type="text" id="code-postal" name="code_postal" inputmode="numeric">
+        </div>
+        <div class="fr-field">
+          <label for="ville">Ville</label>
+          <input type="text" id="ville" name="ville">
+        </div>
+      </div>
+
+      <div class="fr-field">
+        <label for="sujet">Sujet <span class="star">*</span></label>
+        <input type="text" id="sujet" name="sujet" required>
+      </div>
+
+      <div class="fr-field">
+        <label for="message">Message <span class="star">*</span></label>
+        <textarea id="message" name="message" required></textarea>
+      </div>
+
+      <div class="fr-discord-note">
+        <strong>Pour recevoir la réponse à votre demande sur Discord</strong>, indiquez votre pseudo Discord
+        exact (avec le # ou l'identifiant complet). C'est ce pseudo qui sera utilisé pour vous contacter
+        une fois votre dossier étudié.
+      </div>
+
+      <div class="fr-field">
+        <label for="discord">Pseudo Discord <span class="star">*</span></label>
+        <span class="fr-hint">Exemple : jean.dupont ou Jean#1234</span>
+        <input type="text" id="discord" name="discord_pseudo" required>
+      </div>
+
+      <button type="submit" class="fr-submit-btn" id="submit-btn">Envoyer la demande</button>
+
+      <div class="form-status" id="form-status"></div>
+    </form>
+  </main>
+
+  <script>
+    /* =====================================================================
+       ENVOI VERS DISCORD (webhook)
+       -----------------------------------------------------------------
+       1. Sur Discord : Paramètres du serveur → Intégrations → Webhooks
+          → Nouveau webhook → choisis le salon de réception → Copier l'URL.
+       2. Colle cette URL ci-dessous, à la place de "COLLE_TON_URL_WEBHOOK_ICI".
+       3. Chaque envoi du formulaire postera un message avec toutes les
+          informations dans le salon Discord choisi.
+
+       IMPORTANT : un webhook seul ne peut PAS envoyer de boutons
+       "Accepter / Refuser" ni répondre automatiquement à la personne sur
+       Discord — ça nécessite un vrai bot (voir les fichiers du bot fournis
+       séparément, à héberger ailleurs que sur GitHub Pages).
+    ===================================================================== */
+    const WEBHOOK_URL = "COLLE_TON_URL_WEBHOOK_ICI";
+
+    const form = document.getElementById('permis-arme-form');
+    const statusBox = document.getElementById('form-status');
+    const submitBtn = document.getElementById('submit-btn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      statusBox.className = 'form-status';
+      statusBox.textContent = '';
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      if (WEBHOOK_URL === "COLLE_TON_URL_WEBHOOK_ICI") {
+        statusBox.className = 'form-status error';
+        statusBox.textContent = "Le webhook Discord n'est pas encore configuré (voir le commentaire dans le code de cette page).";
+        return;
+      }
+
+      const data = new FormData(form);
+      const profil = data.get('profil') || "Non précisé";
+
+      const embed = {
+        title: "📋 Nouvelle demande — Permis de détention d'arme",
+        color: 0x1212b3,
+        fields: [
+          { name: "Vous êtes", value: profil, inline: true },
+          { name: "Catégorie d'arme", value: data.get('categorie') || "—", inline: true },
+          { name: "Date de naissance", value: data.get('date_naissance') || "—", inline: true },
+          { name: "Nom", value: data.get('nom') || "—", inline: true },
+          { name: "Prénom", value: data.get('prenom') || "—", inline: true },
+          { name: "Pseudo Discord", value: data.get('discord_pseudo') || "—", inline: true },
+          { name: "Email", value: data.get('email') || "—", inline: true },
+          { name: "Téléphone", value: data.get('telephone') || "—", inline: true },
+          { name: "Adresse", value: `${data.get('adresse') || "—"} ${data.get('code_postal') || ""} ${data.get('ville') || ""}`.trim(), inline: false },
+          { name: "Sujet", value: data.get('sujet') || "—", inline: false },
+          { name: "Message", value: data.get('message') || "—", inline: false }
+        ],
+        timestamp: new Date().toISOString()
+      };
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Envoi en cours…";
+
+      try {
+        const response = await fetch(WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ embeds: [embed] })
+        });
+
+        if (response.ok) {
+          statusBox.className = 'form-status success';
+          statusBox.textContent = "Votre demande a bien été envoyée. Vous serez contacté(e) sur Discord après étude de votre dossier.";
+          form.reset();
+        } else {
+          throw new Error("Réponse non valide du webhook");
+        }
+      } catch (err) {
+        statusBox.className = 'form-status error';
+        statusBox.textContent = "Une erreur est survenue lors de l'envoi. Réessaie dans quelques instants.";
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Envoyer la demande";
+      }
+    });
+
+    // gestion du mega-menu de l'en-tête
+    const navButtons = document.querySelectorAll('.fr-nav__btn');
+    const overlay = document.getElementById('fr-nav-overlay');
+
+    function closeAllMenus() {
+      navButtons.forEach(btn => {
+        btn.setAttribute('aria-expanded', 'false');
+        document.getElementById(btn.getAttribute('aria-controls')).classList.remove('fr-collapse--expanded');
+      });
+      overlay.classList.remove('is-open');
+    }
+
+    navButtons.forEach(btn => {
+      const panel = document.getElementById(btn.getAttribute('aria-controls'));
+      btn.addEventListener('click', () => {
+        const alreadyOpen = btn.getAttribute('aria-expanded') === 'true';
+        closeAllMenus();
+        if (!alreadyOpen) {
+          btn.setAttribute('aria-expanded', 'true');
+          panel.classList.add('fr-collapse--expanded');
+          overlay.classList.add('is-open');
+        }
+      });
+      panel.querySelector('.fr-btn--close').addEventListener('click', closeAllMenus);
+    });
+
+    overlay.addEventListener('click', closeAllMenus);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAllMenus(); });
+  </script>
+
+</body>
+</html>
