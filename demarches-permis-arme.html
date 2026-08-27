@@ -490,7 +490,7 @@
        Discord — ça nécessite un vrai bot (voir les fichiers du bot fournis
        séparément, à héberger ailleurs que sur GitHub Pages).
     ===================================================================== */
-    const WEBHOOK_URL = "COLLE_TON_URL_WEBHOOK_ICI";
+    const WEBHOOK_URL = "https://martiniquerp-gouv.onrender.com";
 
     const form = document.getElementById('permis-arme-form');
     const statusBox = document.getElementById('form-status');
@@ -506,7 +506,7 @@
         return;
       }
 
-      if (WEBHOOK_URL === "COLLE_TON_URL_WEBHOOK_ICI") {
+      if (WEBHOOK_URL === "https://discord.com/oauth2/authorize?client_id=1542629483331330159&permissions=83968&integration_type=0&scope=bot") {
         statusBox.className = 'form-status error';
         statusBox.textContent = "Le webhook Discord n'est pas encore configuré (voir le commentaire dans le code de cette page).";
         return;
