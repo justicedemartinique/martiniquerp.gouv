@@ -285,7 +285,7 @@
                 <div class="fr-mega-menu__category-col">
                   <h5 class="fr-mega-menu__category"><a class="fr-nav__link" href="#">À la une</a></h5>
                   <ul class="fr-mega-menu__list">
-                    <li><a class="fr-nav__link" href="#">Communiqués de presse</a></li>
+                    <li><a class="fr-nav__link" href="communiques-presse.html">Communiqués de presse</a></li>
                     <li><a class="fr-nav__link" href="#">Brèves</a></li>
                   </ul>
                 </div>
@@ -385,9 +385,9 @@
       <fieldset class="fr-fieldset">
         <legend>Vous êtes <span class="star">*</span></legend>
         <div class="fr-radio-group">
-          <label><input type="radio" name="profil" value="Un particulier" required> Un chasseur</label>
-          <label><input type="radio" name="profil" value="Une collectivité locale"> Un membre des forces de l'ordres</label>
-          <label><input type="radio" name="profil" value="Une entreprise"> Un citoyen</label>
+          <label><input type="radio" name="profil" value="Un chasseur" required> Un chasseur</label>
+          <label><input type="radio" name="profil" value="Un membre des forces de l'ordre"> Un membre des forces de l'ordre</label>
+          <label><input type="radio" name="profil" value="Un citoyen"> Un citoyen</label>
           <label><input type="radio" name="profil" value="Autre"> Autre</label>
         </div>
       </fieldset>
@@ -482,12 +482,6 @@
        destructed"). D'où le passage par le bot (voir dossier discord-bot/) :
        le formulaire envoie les données à SON API, qui elle-même poste le
        message dans Discord avec le token du bot, resté secret côté serveur.
-
-       1. Héberge le bot (voir discord-bot/README.md — étapes Render).
-       2. Une fois en ligne, tu obtiens une URL du type :
-          https://ton-bot.onrender.com
-       3. Colle cette URL ci-dessous, à la place de "COLLE_URL_DE_TON_BOT_ICI"
-          (sans le / à la fin).
     ===================================================================== */
     const BOT_API_URL = "https://martiniquerp-gouv.onrender.com";
 
