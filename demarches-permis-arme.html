@@ -458,15 +458,23 @@
       </div>
 
       <div class="fr-discord-note">
-        <strong>Pour recevoir la réponse à votre demande sur Discord</strong>, indiquez votre pseudo Discord
-        exact (avec le # ou l'identifiant complet). C'est ce pseudo qui sera utilisé pour vous contacter
-        une fois votre dossier étudié.
+        <strong>Pour recevoir la réponse à votre demande sur Discord</strong>, tu dois indiquer ton
+        <strong>identifiant Discord numérique</strong> (pas juste ton pseudo — c'est cet identifiant qui
+        permet au bot de t'envoyer un message privé). Pour le récupérer :
+        Paramètres Discord → Avancés → active « Mode développeur », puis clic droit sur ton propre profil
+        → « Copier l'identifiant utilisateur ».
       </div>
 
       <div class="fr-field">
-        <label for="discord">Pseudo Discord <span class="star">*</span></label>
-        <span class="fr-hint">Exemple : jean.dupont ou Jean#1234</span>
-        <input type="text" id="discord" name="discord_pseudo" required>
+        <label for="discord-id">Identifiant Discord (ID numérique) <span class="star">*</span></label>
+        <span class="fr-hint">Exemple : 123456789012345678 — voir l'explication ci-dessus pour le trouver</span>
+        <input type="text" id="discord-id" name="discord_id" pattern="[0-9]{15,25}" title="Uniquement des chiffres (17 à 19 chiffres généralement)" required>
+      </div>
+
+      <div class="fr-field">
+        <label for="discord">Pseudo Discord</label>
+        <span class="fr-hint">Facultatif — aide juste l'agent à te reconnaître plus vite dans le message</span>
+        <input type="text" id="discord" name="discord_pseudo">
       </div>
 
       <button type="submit" class="fr-submit-btn" id="submit-btn">Envoyer la demande</button>
