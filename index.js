@@ -69,6 +69,15 @@ client.on('interactionCreate', async (interaction) => {
   await interaction.update({ embeds: [embedMisAJour], components: [] });
 
   // Essaie d'envoyer un message privé à la personne concernée
+  if (!demande.discordUserId) {
+    await interaction.followUp({
+      content: "⚠️ Aucun ID Discord n'a été renseigné dans cette demande (ancien formulaire ?) — impossible d'envoyer le DM automatiquement.",
+      ephemeral: true
+    });
+    demandesEnCours.delete(demandeId);
+    return;
+  }
+
   try {
     const user = await client.users.fetch(demande.discordUserId);
     await user.send({
@@ -85,9 +94,9 @@ client.on('interactionCreate', async (interaction) => {
     });
   } catch (err) {
     // Le DM peut échouer si le bot n'a pas de serveur en commun avec la personne,
-    // ou si ses messages privés sont fermés.
+    // si ses messages privés sont fermés, ou si l'ID Discord saisi est invalide/inexistant.
     await interaction.followUp({
-      content: "⚠️ Impossible d'envoyer un message privé à cette personne (DMs fermés, ou identifiant Discord incorrect dans le formulaire).",
+      content: "⚠️ Impossible d'envoyer un message privé à cette personne (DMs fermés, bot pas sur un serveur commun, ou ID Discord invalide).",
       ephemeral: true
     });
   }
@@ -126,6 +135,7 @@ app.post('/api/permis-arme', async (req, res) => {
         { name: "Nom", value: donnees.nom || "—", inline: true },
         { name: "Prénom", value: donnees.prenom || "—", inline: true },
         { name: "Pseudo Discord", value: donnees.discord_pseudo || "—", inline: true },
+        { name: "ID Discord", value: donnees.discord_id || "—", inline: true },
         { name: "Email", value: donnees.email || "—", inline: true },
         { name: "Téléphone", value: donnees.telephone || "—", inline: true },
         { name: "Adresse", value: `${donnees.adresse || "—"} ${donnees.code_postal || ""} ${donnees.ville || ""}`.trim() },
