@@ -126,7 +126,7 @@ app.post('/api/permis-arme', async (req, res) => {
     });
 
     const embed = new EmbedBuilder()
-      .setTitle("📋 Nouvelle demande — Permis de détention d'arme")
+      .setTitle("Demande — Permis de détention d'arme")
       .setColor(0x1212b3)
       .addFields(
         { name: "Vous êtes", value: donnees.profil || "—", inline: true },
@@ -136,8 +136,6 @@ app.post('/api/permis-arme', async (req, res) => {
         { name: "Prénom", value: donnees.prenom || "—", inline: true },
         { name: "Pseudo Discord", value: donnees.discord_pseudo || "—", inline: true },
         { name: "ID Discord", value: donnees.discord_id || "—", inline: true },
-        { name: "Email", value: donnees.email || "—", inline: true },
-        { name: "Téléphone", value: donnees.telephone || "—", inline: true },
         { name: "Adresse", value: `${donnees.adresse || "—"} ${donnees.code_postal || ""} ${donnees.ville || ""}`.trim() },
         { name: "Sujet", value: donnees.sujet || "—" },
         { name: "Message", value: donnees.message || "—" }
