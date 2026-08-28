@@ -477,20 +477,23 @@
 
   <script>
     /* =====================================================================
-       ENVOI VERS DISCORD (webhook)
+       ENVOI VERS LE BOT DISCORD (via son API, pas de webhook direct)
        -----------------------------------------------------------------
-       1. Sur Discord : Paramètres du serveur → Intégrations → Webhooks
-          → Nouveau webhook → choisis le salon de réception → Copier l'URL.
-       2. Colle cette URL ci-dessous, à la place de "COLLE_TON_URL_WEBHOOK_ICI".
-       3. Chaque envoi du formulaire postera un message avec toutes les
-          informations dans le salon Discord choisi.
+       Pourquoi pas un webhook direct ? Une URL de webhook collée dans le
+       HTML est visible par n'importe qui (clic droit → code source), et
+       des bots scannent le web pour repérer et spammer ces URL exposées.
+       Discord finit par supprimer le webhook automatiquement ("self-
+       destructed"). D'où le passage par le bot (voir dossier discord-bot/) :
+       le formulaire envoie les données à SON API, qui elle-même poste le
+       message dans Discord avec le token du bot, resté secret côté serveur.
 
-       IMPORTANT : un webhook seul ne peut PAS envoyer de boutons
-       "Accepter / Refuser" ni répondre automatiquement à la personne sur
-       Discord — ça nécessite un vrai bot (voir les fichiers du bot fournis
-       séparément, à héberger ailleurs que sur GitHub Pages).
+       1. Héberge le bot (voir discord-bot/README.md — étapes Render).
+       2. Une fois en ligne, tu obtiens une URL du type :
+          https://ton-bot.onrender.com
+       3. Colle cette URL ci-dessous, à la place de "COLLE_URL_DE_TON_BOT_ICI"
+          (sans le / à la fin).
     ===================================================================== */
-    const WEBHOOK_URL = "https://discord.com/api/webhooks/1542641771714977792/6ezAzWA7mJZ2jKNranlLXwBJ34rD8XK-kaOW906TD9Tg0fBzjSEbcAGWKzISFknVJ-3y";
+    const BOT_API_URL = "https://martiniquerp-gouv.onrender.com";
 
     const form = document.getElementById('permis-arme-form');
     const statusBox = document.getElementById('form-status');
@@ -506,42 +509,23 @@
         return;
       }
 
-      if (WEBHOOK_URL === "https://discord.com/api/webhooks/1542641771714977792/6ezAzWA7mJZ2jKNranlLXwBJ34rD8XK-kaOW906TD9Tg0fBzjSEbcAGWKzISFknVJ-3y") {
+      if (BOT_API_URL === "COLLE_URL_DE_TON_BOT_ICI") {
         statusBox.className = 'form-status error';
-        statusBox.textContent = "Le webhook Discord n'est pas encore configuré (voir le commentaire dans le code de cette page).";
+        statusBox.textContent = "L'adresse du bot n'est pas encore configurée (voir le commentaire dans le code de cette page).";
         return;
       }
 
       const data = new FormData(form);
-      const profil = data.get('profil') || "Non précisé";
-
-      const embed = {
-        title: "📋 Nouvelle demande — Permis de détention d'arme",
-        color: 0x1212b3,
-        fields: [
-          { name: "Vous êtes", value: profil, inline: true },
-          { name: "Catégorie d'arme", value: data.get('categorie') || "—", inline: true },
-          { name: "Date de naissance", value: data.get('date_naissance') || "—", inline: true },
-          { name: "Nom", value: data.get('nom') || "—", inline: true },
-          { name: "Prénom", value: data.get('prenom') || "—", inline: true },
-          { name: "Pseudo Discord", value: data.get('discord_pseudo') || "—", inline: true },
-          { name: "Email", value: data.get('email') || "—", inline: true },
-          { name: "Téléphone", value: data.get('telephone') || "—", inline: true },
-          { name: "Adresse", value: `${data.get('adresse') || "—"} ${data.get('code_postal') || ""} ${data.get('ville') || ""}`.trim(), inline: false },
-          { name: "Sujet", value: data.get('sujet') || "—", inline: false },
-          { name: "Message", value: data.get('message') || "—", inline: false }
-        ],
-        timestamp: new Date().toISOString()
-      };
+      const payload = Object.fromEntries(data.entries());
 
       submitBtn.disabled = true;
       submitBtn.textContent = "Envoi en cours…";
 
       try {
-        const response = await fetch(WEBHOOK_URL, {
+        const response = await fetch(`${BOT_API_URL}/api/permis-arme`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ embeds: [embed] })
+          body: JSON.stringify(payload)
         });
 
         if (response.ok) {
@@ -549,7 +533,7 @@
           statusBox.textContent = "Votre demande a bien été envoyée. Vous serez contacté(e) sur Discord après étude de votre dossier.";
           form.reset();
         } else {
-          throw new Error("Réponse non valide du webhook");
+          throw new Error("Réponse non valide de l'API");
         }
       } catch (err) {
         statusBox.className = 'form-status error';
