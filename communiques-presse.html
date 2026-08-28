@@ -365,19 +365,26 @@
     <!-- =====================================================================
          LISTE DES COMMUNIQUÉS DE PRESSE
          -----------------------------------------------------------------
-         Pour AJOUTER un communiqué : copie un bloc <a class="communique-card">
-         entier (celui juste en dessous) et colle-le juste après, puis change :
-           1. le "href" -> le lien vers la page complète du communiqué (ou #
-              si tu n'as pas encore fait cette page)
-           2. le texte dans <h2 class="communique-title"> -> le titre
-           3. le texte dans <p class="communique-date"> -> la date de publication
+         Même système que pour le Recueil des actes administratifs : chaque
+         carte pointe directement vers un PDF, qui s'ouvre dans un nouvel
+         onglet (pas de page article séparée).
+
+         Pour AJOUTER un communiqué :
+           1. Dépose ton PDF dans le dossier "documents/" (à côté de ce
+              fichier), avec un nom simple, sans espaces ni accents
+              (ex: communique-feux-de-foret.pdf)
+           2. Copie un bloc <a class="communique-card"> entier (celui juste
+              en dessous) et colle-le juste après
+           3. Change le "href" pour "documents/nom-de-ton-fichier.pdf"
+           4. Change le texte dans <h2 class="communique-title"> -> le titre
+           5. Change le texte dans <p class="communique-date"> -> la date
 
          Pour EN RETIRER un : supprime son bloc entier.
          Le plus récent va en premier (tout en haut de la liste).
     ===================================================================== */ -->
     <div class="communique-list">
 
-      <a href="#" class="communique-card">
+      <a href="documents/communique-feux-de-foret.pdf" target="_blank" class="communique-card">
         <div class="communique-thumb" aria-hidden="true">
           <div class="communique-thumb-inner">
             <div class="l1">Communiqué</div>
@@ -391,7 +398,7 @@
         <span class="communique-arrow" aria-hidden="true">→</span>
       </a>
 
-      <a href="#" class="communique-card">
+      <a href="documents/communique-incendie-lamentin.pdf" target="_blank" class="communique-card">
         <div class="communique-thumb" aria-hidden="true">
           <div class="communique-thumb-inner">
             <div class="l1">Communiqué</div>
