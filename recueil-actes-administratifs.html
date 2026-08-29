@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Recueil des actes administratifs — Préfecture de Martinique</title>
+<title>Recueil des actes administratifs — Préfecture RP de Martinique</title>
 <style>
   @font-face { font-family: "Marianne"; src: url("fonts/Marianne-Light.woff2") format("woff2"); font-weight: 300; }
   @font-face { font-family: "Marianne"; src: url("fonts/Marianne-Regular.woff2") format("woff2"); font-weight: 400; }
@@ -16,12 +16,12 @@
     --accent-dark: #1212b3;
     --border-dim: #333;
     --text-dim: #b3b3b3;
-    --gris-texte: #3a3a3a;
-    --gris-bordure: #e2e2e2;
+    --gris-texte: #b8b8b8;
+    --gris-bordure: #333;
   }
 
   * { box-sizing: border-box; }
-  body { margin: 0; font-family: "Marianne", Arial, sans-serif; color: #161616; background: #fff; }
+  body { margin: 0; font-family: "Marianne", Arial, sans-serif; color: #f5f5f5; background: #161616; }
 
   /* =========================================
      EN-TÊTE
@@ -161,12 +161,12 @@
 
   .fr-link--download {
     display: flex; align-items: center; justify-content: space-between; gap: 16px;
-    padding: 18px 4px; color: #161616; text-decoration: none; font-size: 15.5px; font-weight: 500;
+    padding: 18px 4px; color: #f5f5f5; text-decoration: none; font-size: 15.5px; font-weight: 500;
   }
-  .fr-link--download::before { content: "⭳"; flex: none; font-size: 18px; color: var(--accent-dark); margin-right: 4px; }
-  .fr-link--download:hover, .fr-link--download:focus-visible { color: var(--accent-dark); }
-  .fr-link--download:focus-visible { outline: 2px solid var(--accent-dark); outline-offset: 2px; }
-  .fr-link__detail { flex: none; font-size: 13px; font-weight: 400; color: #666; white-space: nowrap; }
+  .fr-link--download::before { content: "⭳"; flex: none; font-size: 18px; color: var(--accent-hover); margin-right: 4px; }
+  .fr-link--download:hover, .fr-link--download:focus-visible { color: var(--accent-hover); }
+  .fr-link--download:focus-visible { outline: 2px solid var(--accent-hover); outline-offset: 2px; }
+  .fr-link__detail { flex: none; font-size: 13px; font-weight: 400; color: var(--text-dim); white-space: nowrap; }
 </style>
 </head>
 <body>
