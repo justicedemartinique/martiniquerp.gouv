@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Le corps préfectoral et les directeurs de services — Préfecture de la Martinique</title>
+<style>
+  @font-face { font-family: "Marianne"; src: url("fonts/Marianne-Light.woff2") format("woff2"); font-weight: 300; }
+  @font-face { font-family: "Marianne"; src: url("fonts/Marianne-Regular.woff2") format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Marianne"; src: url("fonts/Marianne-Medium.woff2") format("woff2"); font-weight: 500; }
+  @font-face { font-family: "Marianne"; src: url("fonts/Marianne-Bold.woff2") format("woff2"); font-weight: 700; }
+
+  :root{
+    --header-bg: #161616;
+    --page-bg: #161616;
+    --accent: #6a6af4;
+    --accent-hover: #8888ff;
+    --accent-dark: #1212b3;
+    --border-dim: #333;
+    --text-dim: #b8b8b8;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Marianne", Arial, sans-serif; color: #f5f5f5; background: var(--page-bg); }
+
+  .fr-header { background: var(--header-bg); color: #fff; position: sticky; top: 0; z-index: 60; }
+  .fr-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+  .fr-header__body { padding: 18px 0; }
+  .fr-header__body-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  .fr-header__identity { display: flex; align-items: center; gap: 14px; }
+  .logo-placeholder {
+    width: 52px; height: 52px; flex: none; border: 2px dashed var(--border-dim); border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 500; color: var(--text-dim); text-align: center; line-height: 1.2;
+  }
+  .fr-header__brand-link { text-decoration: none; display: block; }
+  .fr-logo { font-size: 20px; font-weight: 700; line-height: 1.25; margin: 0; color: #fff; }
+  .fr-header__actions { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+  .fr-header__tools { display: flex; flex-wrap: wrap; gap: 18px 24px; }
+  .fr-tool-link {
+    display: inline-flex; align-items: center; gap: 7px; color: var(--accent-hover);
+    text-decoration: none; font-size: 14px; font-weight: 500; white-space: nowrap;
+  }
+  .fr-tool-link:hover, .fr-tool-link:focus-visible { text-decoration: underline; }
+  .fr-search-bar { display: flex; align-items: center; flex-wrap: wrap; flex: none; width: 300px; max-width: 100%; }
+  .fr-search-bar .fr-label {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+  .fr-search-bar .fr-input {
+    flex: 1; background: #232323; border: 1px solid var(--border-dim); border-right: none; color: #fff;
+    font-family: "Marianne", Arial, sans-serif; font-weight: 300; font-size: 15px;
+    padding: 10px 14px; border-radius: 3px 0 0 3px;
+  }
+  .fr-search-bar .fr-input::placeholder { color: #8f8f8f; }
+  .fr-search-bar .fr-input:focus { outline: none; border-color: var(--accent); }
+  .fr-search-bar .fr-messages-group { width: 100%; order: 3; font-size: 12.5px; }
+  .fr-search-bar .fr-btn {
+    background: var(--accent); border: none; color: #fff; width: 42px; height: 40px;
+    border-radius: 0 3px 3px 0; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 0; flex: none; transition: background 0.15s ease;
+  }
+  .fr-search-bar .fr-btn::before { content: "🔍"; font-size: 16px; }
+  .fr-search-bar .fr-btn:hover, .fr-search-bar .fr-btn:focus-visible { background: var(--accent-hover); }
+
+  .fr-nav { border-top: 1px solid var(--border-dim); position: relative; }
+  .fr-nav__list { list-style: none; margin: 0 auto; padding: 0 24px; max-width: 1280px; display: flex; flex-wrap: wrap; }
+  .fr-nav__item { position: static; }
+  .fr-nav__btn, .fr-nav__link {
+    font-family: "Marianne", Arial, sans-serif;
+    display: flex; align-items: center; gap: 7px;
+    background: none; border: none; color: #fff; text-decoration: none;
+    font-size: 15px; font-weight: 500; padding: 15px 18px;
+    border-bottom: 3px solid transparent; cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .fr-nav__btn:hover, .fr-nav__btn:focus-visible,
+  .fr-nav__link:hover, .fr-nav__link:focus-visible { border-color: var(--accent); }
+  .fr-nav__btn:focus-visible, .fr-nav__link:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .fr-nav__btn::after { content: "▾"; font-size: 10px; color: var(--text-dim); transition: transform 0.15s ease; }
+  .fr-nav__btn[aria-expanded="true"] { border-color: var(--accent); }
+  .fr-nav__btn[aria-expanded="true"]::after { transform: rotate(180deg); }
+  .fr-collapse.fr-mega-menu {
+    display: none; position: absolute; top: 100%; left: 0; right: 0;
+    background: #fff; color: #161616; box-shadow: 0 16px 32px rgba(0,0,0,0.18); z-index: 30;
+  }
+  .fr-collapse.fr-mega-menu.fr-collapse--expanded { display: block; }
+  .mega-inner { max-width: 1280px; margin: 0 auto; padding: 32px 24px 44px; position: relative; }
+  .fr-btn--close {
+    position: absolute; top: 28px; right: 24px; background: none; border: none; color: var(--accent-dark);
+    font-family: "Marianne", Arial, sans-serif; font-size: 14.5px; font-weight: 500;
+    display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 4px 2px;
+  }
+  .fr-btn--close::after { content: "×"; font-size: 18px; line-height: 1; }
+  .fr-btn--close:hover, .fr-btn--close:focus-visible { color: var(--accent-hover); }
+  .fr-grid-row { display: flex; flex-wrap: wrap; gap: 32px 40px; padding-right: 160px; }
+  .fr-mega-menu__leader { flex: 1 1 260px; max-width: 320px; }
+  .fr-mega-menu__leader .fr-h4 { font-size: 22px; font-weight: 700; margin: 0 0 10px; }
+  .fr-mega-menu__leader p { font-size: 14.5px; font-weight: 300; color: #4a4a4a; line-height: 1.55; margin: 0 0 14px; }
+  .fr-mega-menu__leader .fr-link {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 14.5px; font-weight: 500;
+    color: var(--accent-dark); text-decoration: underline;
+  }
+  .fr-mega-menu__leader .fr-link:hover { color: var(--accent-hover); }
+  .fr-mega-menu__category-col { flex: 1 1 200px; max-width: 260px; }
+  .fr-mega-menu__category { margin: 0 0 12px; padding-bottom: 10px; border-bottom: 1px solid #e2e2e2; }
+  .fr-mega-menu__category .fr-nav__link {
+    color: #161616; font-size: 15px; font-weight: 700; padding: 0; border-bottom: none; display: block;
+  }
+  .fr-mega-menu__category .fr-nav__link:hover { color: var(--accent-dark); }
+  .fr-mega-menu__list { list-style: none; margin: 0; padding: 0; }
+  .fr-mega-menu__list li + li { margin-top: 2px; }
+  .fr-mega-menu__list .fr-nav__link {
+    color: #3a3a3a; font-size: 14.5px; font-weight: 400; padding: 8px 0; border-bottom: none; display: block;
+  }
+  .fr-mega-menu__list .fr-nav__link:hover, .fr-mega-menu__list .fr-nav__link[aria-current="page"] { color: var(--accent-dark); }
+  .fr-mega-menu__list .fr-nav__link[aria-current="page"] { font-weight: 500; }
+  .fr-nav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 25; }
+  .fr-nav-overlay.is-open { display: block; }
+
+  @media (max-width: 640px) {
+    .fr-header__body { padding: 14px 0; }
+    .fr-search-bar { width: 100%; }
+    .fr-header__actions { align-items: flex-start; width: 100%; }
+    .fr-nav__list { padding: 0 8px; overflow-x: auto; }
+    .fr-nav__btn, .fr-nav__link { padding: 13px 12px; white-space: nowrap; }
+    .fr-grid-row { padding-right: 0; flex-direction: column; }
+    .fr-btn--close { position: static; margin-bottom: 20px; }
+  }
+
+  main { max-width: 900px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  .breadcrumb { font-size: 13px; color: var(--text-dim); margin-bottom: 18px; }
+  .breadcrumb a { color: var(--text-dim); }
+
+  .page-title { font-size: 30px; font-weight: 700; margin: 0 0 16px; line-height: 1.3; }
+  .page-intro { font-size: 15px; color: var(--text-dim); font-weight: 300; margin: 0 0 28px; }
+  .rubric-subtitle { font-size: 14px; color: var(--text-dim); font-weight: 500; margin: 0 0 20px; }
+
+  .person-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid var(--border-dim);
+    border-radius: 4px;
+    padding: 18px;
+    margin-bottom: 18px;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .person-card:hover,
+  .person-card:focus-visible {
+    border-color: var(--accent);
+    background: #1c1c1c;
+  }
+
+  .person-badge {
+    flex: none;
+    width: 92px;
+    display: flex;
+    flex-direction: column;
+  }
+  .person-badge .flag-mini {
+    width: 26px;
+    height: 18px;
+    border-radius: 2px;
+    margin-bottom: 6px;
+    background: linear-gradient(to right, #000091 0 33.3%, #fff 33.3% 66.6%, #E1000F 66.6% 100%);
+  }
+  .person-badge .name-line {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: #fff;
+    text-transform: uppercase;
+    line-height: 1.25;
+  }
+  .person-badge .motto {
+    margin-top: 6px;
+    font-size: 7.5px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text-dim);
+    line-height: 1.35;
+  }
+
+  .person-body { flex: 1; min-width: 0; }
+  .person-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0 0 8px;
+    line-height: 1.3;
+  }
+  .person-card:hover .person-title,
+  .person-card:focus-visible .person-title { color: var(--accent-hover); }
+  .person-date { font-size: 13.5px; color: var(--text-dim); font-weight: 300; }
+
+  .person-arrow {
+    flex: none;
+    align-self: center;
+    color: var(--accent);
+    font-size: 18px;
+  }
+
+  @media (max-width: 560px) {
+    .person-card { align-items: flex-start; }
+    .person-badge { width: 70px; }
+  }
+</style>
+</head>
+<body>
+
+  <header role="banner" class="fr-header">
+    <div class="fr-header__body">
+      <div class="fr-container">
+        <div class="fr-header__body-row">
+
+          <div class="fr-header__identity">
+            <div class="logo-placeholder" aria-hidden="true">LOGO</div>
+            <a href="index.html" class="fr-header__brand-link" title="Accueil - Préfecture RP de Martinique">
+              <p class="fr-logo">Les services de l'État<br>en Martinique</p>
+            </a>
+          </div>
+
+          <div class="fr-header__actions">
+            <div class="fr-header__tools">
+              <a href="#" class="fr-tool-link">✉ Nous contacter</a>
+              <a href="#" class="fr-tool-link">⚙ Paramètres d'affichage</a>
+            </div>
+            <div class="fr-search-bar" role="search">
+              <label class="fr-label" for="search-input">Rechercher</label>
+              <input class="fr-input" aria-describedby="search-input-messages" placeholder="Rechercher" id="search-input" type="search">
+              <div class="fr-messages-group" id="search-input-messages" aria-live="polite"></div>
+              <button title="Rechercher" type="submit" class="fr-btn">Rechercher</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <nav class="fr-nav" role="navigation" aria-label="Menu principal">
+      <ul class="fr-nav__list">
+
+        <li class="fr-nav__item">
+          <button class="fr-nav__btn" aria-expanded="false" aria-controls="mega-menu-actualites">Actualités</button>
+          <div class="fr-collapse fr-mega-menu" id="mega-menu-actualites" tabindex="-1">
+            <div class="mega-inner">
+              <button class="fr-btn--close" aria-controls="mega-menu-actualites">Fermer</button>
+              <div class="fr-grid-row">
+                <div class="fr-mega-menu__leader">
+                  <h4 class="fr-h4">Actualités</h4>
+                  <p>Toute l'actualité de la préfecture : annonces officielles et informations brèves.</p>
+                  <a class="fr-link" href="#">Voir toute la rubrique →</a>
+                </div>
+                <div class="fr-mega-menu__category-col">
+                  <h5 class="fr-mega-menu__category"><a class="fr-nav__link" href="#">À la une</a></h5>
+                  <ul class="fr-mega-menu__list">
+                    <li><a class="fr-nav__link" href="communiques-presse.html">Communiqués de presse</a></li>
+                    <li><a class="fr-nav__link" href="#">Brèves</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="fr-nav__item">
+          <button class="fr-nav__btn" aria-expanded="false" aria-controls="mega-menu-services">Services de l'État</button>
+          <div class="fr-collapse fr-mega-menu" id="mega-menu-services" tabindex="-1">
+            <div class="mega-inner">
+              <button class="fr-btn--close" aria-controls="mega-menu-services">Fermer</button>
+              <div class="fr-grid-row">
+                <div class="fr-mega-menu__leader">
+                  <h4 class="fr-h4">Services de l'État</h4>
+                  <p>Organisation et fonctionnement des services de la préfecture en Martinique.</p>
+                  <a class="fr-link" href="#">Voir toute la rubrique →</a>
+                </div>
+                <div class="fr-mega-menu__category-col">
+                  <h5 class="fr-mega-menu__category"><a class="fr-nav__link" href="prefecture-martinique.html" aria-current="page">Préfecture de la Martinique</a></h5>
+                  <ul class="fr-mega-menu__list">
+                    <li><a class="fr-nav__link" href="organigrammes.html">Organigrammes</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="fr-nav__item">
+          <button class="fr-nav__btn" aria-expanded="false" aria-controls="mega-menu-publications">Publications</button>
+          <div class="fr-collapse fr-mega-menu" id="mega-menu-publications" tabindex="-1">
+            <div class="mega-inner">
+              <button class="fr-btn--close" aria-controls="mega-menu-publications">Fermer</button>
+              <div class="fr-grid-row">
+                <div class="fr-mega-menu__leader">
+                  <h4 class="fr-h4">Publications</h4>
+                  <p>Documents officiels publiés par la préfecture et offres d'emploi.</p>
+                  <a class="fr-link" href="#">Voir toute la rubrique →</a>
+                </div>
+                <div class="fr-mega-menu__category-col">
+                  <h5 class="fr-mega-menu__category"><a class="fr-nav__link" href="#">Documents officiels</a></h5>
+                  <ul class="fr-mega-menu__list">
+                    <li><a class="fr-nav__link" href="recueil-actes-administratifs.html">Recueil des actes administratifs</a></li>
+                    <li><a class="fr-nav__link" href="#">Recrutement</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="fr-nav__item">
+          <button class="fr-nav__btn" aria-expanded="false" aria-controls="mega-menu-demarches">Démarches</button>
+          <div class="fr-collapse fr-mega-menu" id="mega-menu-demarches" tabindex="-1">
+            <div class="mega-inner">
+              <button class="fr-btn--close" aria-controls="mega-menu-demarches">Fermer</button>
+              <div class="fr-grid-row">
+                <div class="fr-mega-menu__leader">
+                  <h4 class="fr-h4">Démarches</h4>
+                  <p>Effectuez vos démarches administratives directement en ligne.</p>
+                  <a class="fr-link" href="#">Voir toute la rubrique →</a>
+                </div>
+                <div class="fr-mega-menu__category-col">
+                  <h5 class="fr-mega-menu__category"><a class="fr-nav__link" href="#">Démarches courantes</a></h5>
+                  <ul class="fr-mega-menu__list">
+                    <li><a class="fr-nav__link" href="demarches-permis-arme.html">Permis de détention d'arme</a></li>
+                    <li><a class="fr-nav__link" href="#">Manifestation</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+      </ul>
+    </nav>
+  </header>
+
+  <div class="fr-nav-overlay" id="fr-nav-overlay"></div>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="index.html">Accueil</a> › <a href="prefecture-martinique.html">Préfecture de la Martinique</a> › Le corps préfectoral et les directeurs de services
+    </div>
+
+    <h1 class="page-title">Le corps préfectoral et les directeurs de services</h1>
+    <p class="page-intro">Découvrez les membres qui composent le corps préfectoral.</p>
+    <p class="rubric-subtitle">À lire dans cette rubrique</p>
+
+    <!-- =====================================================================
+         LISTE DU CORPS PRÉFECTORAL
+         -----------------------------------------------------------------
+         Même système que les autres listes du site : chaque carte pointe
+         vers un PDF (la biographie de la personne), ouvert dans un nouvel
+         onglet.
+
+         Pour AJOUTER une personne :
+           1. Dépose son PDF de biographie dans "documents/" (à côté de ce
+              fichier), nom simple, sans espaces ni accents
+              (ex: bio-secretaire-general.pdf)
+           2. Copie un bloc <a class="person-card"> entier et colle-le
+              juste après
+           3. Change le "href" pour "documents/nom-de-ton-fichier.pdf"
+           4. Change le texte dans <h2 class="person-title"> -> le nom/titre
+           5. Change le texte dans <p class="person-date"> -> la date
+
+         Pour EN RETIRER une : supprime son bloc entier.
+    ===================================================================== */ -->
+    <div class="person-list">
+
+      <a href="documents/bio-prefet-martinique.pdf" target="_blank" class="person-card">
+        <div class="person-badge" aria-hidden="true">
+          <div class="flag-mini"></div>
+          <div class="name-line">Préfet</div>
+          <div class="name-line">de la Martinique</div>
+          <div class="motto">Liberté<br>Égalité<br>Fraternité</div>
+        </div>
+        <div class="person-body">
+          <h2 class="person-title">Le Préfet de la Martinique</h2>
+          <p class="person-date">Publié le 10/02/2025</p>
+        </div>
+        <span class="person-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a href="documents/bio-secretaire-general.pdf" target="_blank" class="person-card">
+        <div class="person-badge" aria-hidden="true">
+          <div class="flag-mini"></div>
+          <div class="name-line">Préfet</div>
+          <div class="name-line">de la Martinique</div>
+          <div class="motto">Liberté<br>Égalité<br>Fraternité</div>
+        </div>
+        <div class="person-body">
+          <h2 class="person-title">Le Secrétaire Général de la préfecture</h2>
+          <p class="person-date">Publié le 20/11/2024</p>
+        </div>
+        <span class="person-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a href="documents/bio-directeur-cabinet.pdf" target="_blank" class="person-card">
+        <div class="person-badge" aria-hidden="true">
+          <div class="flag-mini"></div>
+          <div class="name-line">Préfet</div>
+          <div class="name-line">de la Martinique</div>
+          <div class="motto">Liberté<br>Égalité<br>Fraternité</div>
+        </div>
+        <div class="person-body">
+          <h2 class="person-title">Le Directeur de cabinet du préfet</h2>
+          <p class="person-date">Publié le 03/09/2025</p>
+        </div>
+        <span class="person-arrow" aria-hidden="true">→</span>
+      </a>
+
+    </div>
+  </main>
+
+  <script>
+    const navButtons = document.querySelectorAll('.fr-nav__btn');
+    const overlay = document.getElementById('fr-nav-overlay');
+
+    function closeAllMenus() {
+      navButtons.forEach(btn => {
+        btn.setAttribute('aria-expanded', 'false');
+        document.getElementById(btn.getAttribute('aria-controls')).classList.remove('fr-collapse--expanded');
+      });
+      overlay.classList.remove('is-open');
+    }
+
+    navButtons.forEach(btn => {
+      const panel = document.getElementById(btn.getAttribute('aria-controls'));
+      btn.addEventListener('click', () => {
+        const alreadyOpen = btn.getAttribute('aria-expanded') === 'true';
+        closeAllMenus();
+        if (!alreadyOpen) {
+          btn.setAttribute('aria-expanded', 'true');
+          panel.classList.add('fr-collapse--expanded');
+          overlay.classList.add('is-open');
+        }
+      });
+      panel.querySelector('.fr-btn--close').addEventListener('click', closeAllMenus);
+    });
+
+    overlay.addEventListener('click', closeAllMenus);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAllMenus(); });
+  </script>
+
+</body>
+</html>
