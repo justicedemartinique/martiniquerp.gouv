@@ -163,45 +163,34 @@
     background: #1c1c1c;
   }
 
-  /* =====================================================================
-     AFFICHE GÉNÉRIQUE (même principe que la vignette "communiqué de
-     presse") : une seule affiche réutilisée pour tous les organigrammes,
-     pas besoin d'importer les vrais logos des services.
-  ===================================================================== */
+  /* vignette générique — identique à celle des communiqués de presse, texte différent */
   .organigramme-thumb {
     flex: none;
-    width: 110px;
+    width: 220px;
     height: 130px;
     border-radius: 3px;
-    background: #0d1730;
+    background: linear-gradient(135deg, #1a2440, #0d1730);
+    position: relative;
     display: flex;
-    flex-direction: column;
-    padding: 10px 8px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
   }
-  .organigramme-thumb .flag-bar {
-    width: 28px;
-    height: 20px;
-    border-radius: 2px;
-    margin-bottom: 8px;
+  .organigramme-thumb::after {
+    content: "";
+    position: absolute;
+    left: 10px; right: 10px; bottom: 10px;
+    height: 3px;
     background: linear-gradient(to right, #000091 0 33.3%, #fff 33.3% 66.6%, #E1000F 66.6% 100%);
+    border-radius: 2px;
   }
-  .organigramme-thumb .line1,
-  .organigramme-thumb .line2 {
-    font-size: 10.5px;
-    font-weight: 700;
-    letter-spacing: 0.01em;
-    color: #fff;
-    text-transform: uppercase;
-    line-height: 1.2;
+  .organigramme-thumb-inner {
+    border: 1px solid rgba(255,255,255,0.4);
+    padding: 12px 18px;
+    text-align: center;
   }
-  .organigramme-thumb .motto {
-    margin-top: auto;
-    font-size: 8px;
-    font-weight: 300;
-    font-style: italic;
-    color: #9aa0c8;
-    line-height: 1.3;
-  }
+  .organigramme-thumb-inner .l1 { font-size: 15px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; color: #fff; }
+  .organigramme-thumb-inner .l2 { font-size: 15px; font-weight: 300; letter-spacing: 0.02em; color: #fff; }
 
   .organigramme-body {
     flex: 1;
@@ -230,9 +219,7 @@
 
   @media (max-width: 640px) {
     .organigramme-card { flex-direction: column; }
-    .organigramme-thumb { width: 100%; height: 90px; flex-direction: row; align-items: center; gap: 10px; }
-    .organigramme-thumb .flag-bar { margin-bottom: 0; width: 24px; height: 30px; }
-    .organigramme-thumb .motto { margin-top: 0; }
+    .organigramme-thumb { width: 100%; height: 150px; }
     .organigramme-arrow { display: none; }
   }
 </style>
@@ -397,10 +384,10 @@
 
       <a href="documents/organigramme-chefs-de-service.pdf" target="_blank" class="organigramme-card">
         <div class="organigramme-thumb" aria-hidden="true">
-          <div class="flag-bar"></div>
-          <div class="line1">Préfecture</div>
-          <div class="line2">de la Martinique</div>
-          <div class="motto">Liberté<br>Égalité<br>Fraternité</div>
+          <div class="organigramme-thumb-inner">
+            <div class="l1">Organigramme</div>
+            <div class="l2">des services</div>
+          </div>
         </div>
         <div class="organigramme-body">
           <h2 class="organigramme-title">L'organigramme des chefs de service de l'État en Martinique</h2>
@@ -411,10 +398,10 @@
 
       <a href="documents/organigramme-prefecture-sous-prefectures.pdf" target="_blank" class="organigramme-card">
         <div class="organigramme-thumb" aria-hidden="true">
-          <div class="flag-bar"></div>
-          <div class="line1">Préfecture</div>
-          <div class="line2">de la Martinique</div>
-          <div class="motto">Liberté<br>Égalité<br>Fraternité</div>
+          <div class="organigramme-thumb-inner">
+            <div class="l1">Organigramme</div>
+            <div class="l2">des services</div>
+          </div>
         </div>
         <div class="organigramme-body">
           <h2 class="organigramme-title">L'organigramme de la préfecture et des sous-préfectures</h2>
@@ -425,10 +412,10 @@
 
       <a href="documents/organigramme-ddpn.pdf" target="_blank" class="organigramme-card">
         <div class="organigramme-thumb" aria-hidden="true">
-          <div class="flag-bar"></div>
-          <div class="line1">Préfecture</div>
-          <div class="line2">de la Martinique</div>
-          <div class="motto">Liberté<br>Égalité<br>Fraternité</div>
+          <div class="organigramme-thumb-inner">
+            <div class="l1">Organigramme</div>
+            <div class="l2">des services</div>
+          </div>
         </div>
         <div class="organigramme-body">
           <h2 class="organigramme-title">L'organigramme de la Direction Départementale de la Police Nationale de la Martinique — DDPN</h2>
@@ -439,10 +426,10 @@
 
       <a href="documents/organigramme-gendarmerie.pdf" target="_blank" class="organigramme-card">
         <div class="organigramme-thumb" aria-hidden="true">
-          <div class="flag-bar"></div>
-          <div class="line1">Préfecture</div>
-          <div class="line2">de la Martinique</div>
-          <div class="motto">Liberté<br>Égalité<br>Fraternité</div>
+          <div class="organigramme-thumb-inner">
+            <div class="l1">Organigramme</div>
+            <div class="l2">des services</div>
+          </div>
         </div>
         <div class="organigramme-body">
           <h2 class="organigramme-title">L'organigramme du groupement de gendarmerie départementale de la Martinique</h2>
