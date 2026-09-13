@@ -170,45 +170,72 @@
     color: #e8c766; font-size: 13px; border-radius: 0 3px 3px 0; display: none;
   }
 
-  .mail-app { display: none; max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
-  .mail-app.is-visible { display: block; }
+  .mail-app { display: none; height: calc(100vh - 143px); }
+  .mail-app.is-visible { display: flex; flex-direction: column; }
   .auth-wrap.is-hidden { display: none; }
 
-  .mail-topbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
-  .mail-topbar h1 { font-size: 24px; font-weight: 700; margin: 0; }
-  .mail-address { font-size: 13.5px; color: var(--text-dim); font-weight: 300; margin-top: 4px; }
-  .mail-address strong { color: var(--accent-hover); font-weight: 500; }
+  .mail-layout { display: flex; flex: 1; min-height: 0; border-top: 1px solid var(--border-dim); }
 
-  .mail-layout { display: flex; gap: 24px; align-items: flex-start; }
-  .mail-sidebar { flex: none; width: 200px; display: flex; flex-direction: column; gap: 4px; }
-  .mail-sidebar button {
-    text-align: left; background: none; border: none; color: var(--text-dim); font-family: inherit;
-    font-size: 14.5px; font-weight: 500; padding: 10px 14px; border-radius: 3px; cursor: pointer;
+  /* ---- colonne 1 : dossiers ---- */
+  .mail-sidebar {
+    flex: none; width: 220px; background: #1a1a1a; border-right: 1px solid var(--border-dim);
+    padding: 18px 14px; display: flex; flex-direction: column; overflow-y: auto;
   }
-  .mail-sidebar button:hover { background: #232323; color: #fff; }
-  .mail-sidebar button.active { background: var(--accent-dark); color: #fff; }
-  .mail-sidebar .compose-btn { background: var(--accent); color: #fff; margin-bottom: 12px; font-weight: 700; }
-  .mail-sidebar .compose-btn:hover { background: var(--accent-hover); }
+  .compose-btn {
+    background: var(--accent); color: #fff; border: none; border-radius: 3px;
+    padding: 12px 14px; font-family: inherit; font-size: 14.5px; font-weight: 700; cursor: pointer;
+    margin-bottom: 18px; text-align: left; transition: background 0.15s ease;
+  }
+  .compose-btn:hover { background: var(--accent-hover); }
+  .sidebar-label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--text-dim); margin: 14px 8px 8px;
+  }
+  .sidebar-item {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    text-align: left; background: none; border: none; color: #ddd; font-family: inherit;
+    font-size: 14px; font-weight: 500; padding: 9px 10px; border-radius: 3px; cursor: pointer; width: 100%;
+  }
+  .sidebar-item:hover { background: #262626; color: #fff; }
+  .sidebar-item.active { background: var(--accent-dark); color: #fff; }
+  .sidebar-item.is-disabled { color: #666; cursor: default; }
+  .sidebar-item.is-disabled:hover { background: none; color: #666; }
+  .sidebar-badge {
+    background: var(--accent); color: #fff; font-size: 11px; font-weight: 700;
+    border-radius: 10px; padding: 1px 7px; min-width: 18px; text-align: center;
+  }
 
-  .mail-main { flex: 1; min-width: 0; background: var(--panel-bg); border: 1px solid var(--border-dim); border-radius: 4px; min-height: 420px; }
-
+  /* ---- colonne 2 : liste des messages ---- */
+  .mail-list-col { flex: none; width: 340px; border-right: 1px solid var(--border-dim); overflow-y: auto; }
   .mail-list { list-style: none; margin: 0; padding: 0; }
-  .mail-list li { border-bottom: 1px solid var(--border-dim); padding: 14px 18px; cursor: pointer; display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
-  .mail-list li:hover { background: #232323; }
+  .mail-list li {
+    border-bottom: 1px solid var(--border-dim); padding: 13px 16px; cursor: pointer;
+    border-left: 3px solid transparent;
+  }
+  .mail-list li:hover { background: #1e1e1e; }
+  .mail-list li.selected { background: #202040; border-left-color: var(--accent); }
   .mail-list li.unread .mail-from, .mail-list li.unread .mail-subject { font-weight: 700; color: #fff; }
-  .mail-from { font-size: 13.5px; color: var(--text-dim); flex: none; width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .mail-subject { font-size: 14.5px; color: #ddd; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .mail-date { font-size: 12.5px; color: var(--text-dim); flex: none; }
+  .mail-list li .mail-row-top { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 3px; }
+  .mail-from { font-size: 13.5px; color: #ddd; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mail-date { font-size: 11.5px; color: var(--text-dim); flex: none; }
+  .mail-subject { font-size: 13.5px; color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .mail-empty { padding: 40px 24px; text-align: center; color: var(--text-dim); font-size: 14px; }
 
-  .mail-detail { padding: 24px; }
-  .mail-detail-back { background: none; border: none; color: var(--accent-hover); font-family: inherit; font-size: 13.5px; cursor: pointer; margin-bottom: 18px; }
-  .mail-detail h2 { font-size: 19px; font-weight: 700; margin: 0 0 10px; }
-  .mail-detail .meta { font-size: 13px; color: var(--text-dim); margin-bottom: 20px; }
-  .mail-detail .meta strong { color: #ddd; font-weight: 500; }
-  .mail-detail .body { font-size: 15px; line-height: 1.6; color: #e2e2e2; white-space: pre-wrap; }
+  /* ---- colonne 3 : lecture / composition ---- */
+  .mail-reading-col { flex: 1; min-width: 0; overflow-y: auto; }
+  .mail-reading-empty {
+    height: 100%; display: flex; align-items: center; justify-content: center;
+    color: var(--text-dim); font-size: 14.5px; text-align: center; padding: 24px;
+  }
 
-  .compose-form { padding: 24px; }
+  .mail-detail { padding: 28px 32px; }
+  .mail-detail h2 { font-size: 20px; font-weight: 700; margin: 0 0 12px; }
+  .mail-detail .meta { font-size: 13px; color: var(--text-dim); margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid var(--border-dim); }
+  .mail-detail .meta strong { color: #ddd; font-weight: 500; }
+  .mail-detail .body { font-size: 15px; line-height: 1.65; color: #e2e2e2; white-space: pre-wrap; }
+
+  .compose-form { padding: 28px 32px; max-width: 560px; }
+  .compose-form h2 { font-size: 19px; font-weight: 700; margin: 0 0 20px; }
   .compose-field { margin-bottom: 16px; }
   .compose-field label { display: block; font-size: 13.5px; font-weight: 700; margin-bottom: 6px; }
   .compose-field input, .compose-field textarea {
@@ -216,14 +243,21 @@
     padding: 11px 12px; background: #232323; border: none; border-bottom: 2px solid var(--border-dim);
     border-radius: 2px 2px 0 0; color: #fff;
   }
-  .compose-field textarea { min-height: 180px; resize: vertical; font-family: inherit; }
+  .compose-field textarea { min-height: 200px; resize: vertical; font-family: inherit; }
   .compose-field input:focus, .compose-field textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
   .compose-hint { font-size: 12.5px; color: var(--text-dim); margin-top: 4px; }
 
-  @media (max-width: 720px) {
+  .mail-topbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 16px 24px; }
+  .mail-topbar h1 { font-size: 20px; font-weight: 700; margin: 0; }
+  .mail-address { font-size: 13px; color: var(--text-dim); font-weight: 300; margin-top: 2px; }
+  .mail-address strong { color: var(--accent-hover); font-weight: 500; }
+
+  @media (max-width: 900px) {
+    .mail-app { height: auto; }
     .mail-layout { flex-direction: column; }
-    .mail-sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; }
-    .mail-from { width: 100px; }
+    .mail-sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; border-right: none; border-bottom: 1px solid var(--border-dim); }
+    .mail-list-col { width: 100%; border-right: none; max-height: 300px; }
+    .mail-reading-col { min-height: 300px; }
   }
 </style>
 </head>
@@ -411,11 +445,24 @@
     <div class="mail-layout">
       <div class="mail-sidebar">
         <button class="compose-btn" id="nav-compose" type="button">✏️ Nouveau message</button>
-        <button class="active" id="nav-inbox" type="button">📥 Boîte de réception</button>
-        <button id="nav-sent" type="button">📤 Messages envoyés</button>
+
+        <div class="sidebar-label">Favoris</div>
+        <button class="sidebar-item active" id="nav-inbox" type="button">
+          📥 Boîte de réception <span class="sidebar-badge" id="inbox-badge" style="display:none;"></span>
+        </button>
+        <button class="sidebar-item" id="nav-sent" type="button">📤 Éléments envoyés</button>
+
+        <div class="sidebar-label">Dossiers</div>
+        <button class="sidebar-item is-disabled" type="button" disabled title="Bientôt disponible">📝 Brouillons</button>
+        <button class="sidebar-item is-disabled" type="button" disabled title="Bientôt disponible">🗑️ Éléments supprimés</button>
+        <button class="sidebar-item is-disabled" type="button" disabled title="Bientôt disponible">🗄️ Archive</button>
       </div>
 
-      <div class="mail-main" id="mail-main"></div>
+      <div class="mail-list-col" id="mail-list-col"></div>
+
+      <div class="mail-reading-col" id="mail-reading-col">
+        <div class="mail-reading-empty">Sélectionne un message pour l'afficher, ou clique sur « Nouveau message ».</div>
+      </div>
     </div>
   </div>
 
@@ -427,7 +474,7 @@
        colle son URL ici, à la place de "COLLE_URL_DU_BACKEND_MAIL_ICI"
        (sans le / à la fin).
     ===================================================================== */
-    const API_BASE_URL = "https://martiniquerp-webmail.onrender.com";
+    const API_BASE_URL = "COLLE_URL_DU_BACKEND_MAIL_ICI";
 
     const DOMAIN = "martiniquerp-gouv";
 
@@ -437,7 +484,9 @@
     const backendWarning = document.getElementById('backend-warning');
     const logoutBtn = document.getElementById('logout-btn');
     const myAddressEl = document.getElementById('my-address');
-    const mailMain = document.getElementById('mail-main');
+    const mailListCol = document.getElementById('mail-list-col');
+    const mailReadingCol = document.getElementById('mail-reading-col');
+    const inboxBadge = document.getElementById('inbox-badge');
 
     const tabLogin = document.getElementById('tab-login');
     const tabRegister = document.getElementById('tab-register');
@@ -549,59 +598,85 @@
       return d.toLocaleDateString('fr-FR') + ' à ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
     }
 
+    function afficherEtatVide(texte) {
+      mailReadingCol.innerHTML = `<div class="mail-reading-empty">${escapeHtml(texte)}</div>`;
+    }
+
     async function afficherInbox() {
-      mailMain.innerHTML = '<div class="mail-empty">Chargement…</div>';
+      mailListCol.innerHTML = '<div class="mail-empty">Chargement…</div>';
+      afficherEtatVide("Sélectionne un message pour l'afficher.");
       try {
         const messages = await appelApi('/api/inbox');
+
+        const nbNonLus = messages.filter(m => !m.is_read).length;
+        if (nbNonLus > 0) {
+          inboxBadge.textContent = nbNonLus;
+          inboxBadge.style.display = 'inline-block';
+        } else {
+          inboxBadge.style.display = 'none';
+        }
+
         if (messages.length === 0) {
-          mailMain.innerHTML = '<div class="mail-empty">Aucun message reçu pour le moment.</div>';
+          mailListCol.innerHTML = '<div class="mail-empty">Aucun message reçu pour le moment.</div>';
           return;
         }
-        mailMain.innerHTML = '<ul class="mail-list">' + messages.map(m => `
+        mailListCol.innerHTML = '<ul class="mail-list">' + messages.map(m => `
           <li class="${m.is_read ? '' : 'unread'}" data-id="${m.id}">
-            <span class="mail-from">${m.from_username}@${DOMAIN}</span>
+            <div class="mail-row-top">
+              <span class="mail-from">${m.from_username}@${DOMAIN}</span>
+              <span class="mail-date">${formatDate(m.created_at)}</span>
+            </div>
             <span class="mail-subject">${escapeHtml(m.subject)}</span>
-            <span class="mail-date">${formatDate(m.created_at)}</span>
           </li>
         `).join('') + '</ul>';
-        mailMain.querySelectorAll('li[data-id]').forEach(li => {
-          li.addEventListener('click', () => afficherDetail(li.dataset.id, 'inbox'));
+        mailListCol.querySelectorAll('li[data-id]').forEach(li => {
+          li.addEventListener('click', () => {
+            mailListCol.querySelectorAll('li').forEach(x => x.classList.remove('selected'));
+            li.classList.add('selected');
+            afficherDetail(li.dataset.id, 'inbox');
+          });
         });
       } catch (err) {
-        mailMain.innerHTML = `<div class="mail-empty">${escapeHtml(err.message)}</div>`;
+        mailListCol.innerHTML = `<div class="mail-empty">${escapeHtml(err.message)}</div>`;
       }
     }
 
     async function afficherSent() {
-      mailMain.innerHTML = '<div class="mail-empty">Chargement…</div>';
+      mailListCol.innerHTML = '<div class="mail-empty">Chargement…</div>';
+      afficherEtatVide("Sélectionne un message pour l'afficher.");
       try {
         const messages = await appelApi('/api/sent');
         if (messages.length === 0) {
-          mailMain.innerHTML = '<div class="mail-empty">Aucun message envoyé pour le moment.</div>';
+          mailListCol.innerHTML = '<div class="mail-empty">Aucun message envoyé pour le moment.</div>';
           return;
         }
-        mailMain.innerHTML = '<ul class="mail-list">' + messages.map(m => `
+        mailListCol.innerHTML = '<ul class="mail-list">' + messages.map(m => `
           <li data-id="${m.id}">
-            <span class="mail-from">À : ${m.to_username}@${DOMAIN}</span>
+            <div class="mail-row-top">
+              <span class="mail-from">À : ${m.to_username}@${DOMAIN}</span>
+              <span class="mail-date">${formatDate(m.created_at)}</span>
+            </div>
             <span class="mail-subject">${escapeHtml(m.subject)}</span>
-            <span class="mail-date">${formatDate(m.created_at)}</span>
           </li>
         `).join('') + '</ul>';
-        mailMain.querySelectorAll('li[data-id]').forEach(li => {
-          li.addEventListener('click', () => afficherDetail(li.dataset.id, 'sent'));
+        mailListCol.querySelectorAll('li[data-id]').forEach(li => {
+          li.addEventListener('click', () => {
+            mailListCol.querySelectorAll('li').forEach(x => x.classList.remove('selected'));
+            li.classList.add('selected');
+            afficherDetail(li.dataset.id, 'sent');
+          });
         });
       } catch (err) {
-        mailMain.innerHTML = `<div class="mail-empty">${escapeHtml(err.message)}</div>`;
+        mailListCol.innerHTML = `<div class="mail-empty">${escapeHtml(err.message)}</div>`;
       }
     }
 
-    async function afficherDetail(id, retourVers) {
-      mailMain.innerHTML = '<div class="mail-empty">Chargement…</div>';
+    async function afficherDetail(id, depuis) {
+      afficherEtatVide('Chargement…');
       try {
         const m = await appelApi('/api/message/' + id);
-        mailMain.innerHTML = `
+        mailReadingCol.innerHTML = `
           <div class="mail-detail">
-            <button class="mail-detail-back" id="retour-liste">← Retour</button>
             <h2>${escapeHtml(m.subject)}</h2>
             <div class="meta">
               De : <strong>${m.from_username}@${DOMAIN}</strong><br>
@@ -611,17 +686,20 @@
             <div class="body">${escapeHtml(m.body)}</div>
           </div>
         `;
-        document.getElementById('retour-liste').addEventListener('click', () => {
-          if (retourVers === 'sent') afficherSent(); else afficherInbox();
+        if (depuis === 'inbox') afficherInbox().then(() => {
+          // remet la sélection visuelle après rafraîchissement du badge/liste
+          const li = mailListCol.querySelector(`li[data-id="${id}"]`);
+          if (li) li.classList.add('selected');
         });
       } catch (err) {
-        mailMain.innerHTML = `<div class="mail-empty">${escapeHtml(err.message)}</div>`;
+        afficherEtatVide(err.message);
       }
     }
 
     function afficherCompose() {
-      mailMain.innerHTML = `
+      mailReadingCol.innerHTML = `
         <form class="compose-form" id="compose-form">
+          <h2>Nouveau message</h2>
           <div class="compose-field">
             <label for="compose-to">À</label>
             <input type="text" id="compose-to" placeholder="identifiant-du-destinataire" required>
