@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Mail Interne — Préfecture de la Martinique</title>
+<style>
+  @font-face { font-family: "Marianne"; src: url("fonts/Marianne-Light.woff2") format("woff2"); font-weight: 300; }
+  @font-face { font-family: "Marianne"; src: url("fonts/Marianne-Regular.woff2") format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Marianne"; src: url("fonts/Marianne-Medium.woff2") format("woff2"); font-weight: 500; }
+  @font-face { font-family: "Marianne"; src: url("fonts/Marianne-Bold.woff2") format("woff2"); font-weight: 700; }
+
+  :root{
+    --header-bg: #161616;
+    --page-bg: #161616;
+    --accent: #6a6af4;
+    --accent-hover: #8888ff;
+    --accent-dark: #1212b3;
+    --border-dim: #333;
+    --text-dim: #b8b8b8;
+    --panel-bg: #1c1c1c;
+    --erreur: #ff6b6b;
+    --succes: #4ecb71;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Marianne", Arial, sans-serif; color: #f5f5f5; background: var(--page-bg); }
+
+  .fr-header { background: var(--header-bg); color: #fff; position: sticky; top: 0; z-index: 60; }
+  .fr-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+  .fr-header__body { padding: 18px 0; }
+  .fr-header__body-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  .fr-header__identity { display: flex; align-items: center; gap: 14px; }
+  .logo-placeholder {
+    width: 52px; height: 52px; flex: none; border: 2px dashed var(--border-dim); border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 500; color: var(--text-dim); text-align: center; line-height: 1.2;
+  }
+  .fr-header__brand-link { text-decoration: none; display: block; }
+  .fr-logo { font-size: 20px; font-weight: 700; line-height: 1.25; margin: 0; color: #fff; }
+  .fr-header__actions { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+  .fr-header__tools { display: flex; flex-wrap: wrap; gap: 18px 24px; }
+  .fr-tool-link {
+    display: inline-flex; align-items: center; gap: 7px; color: var(--accent-hover);
+    text-decoration: none; font-size: 14px; font-weight: 500; white-space: nowrap;
+    background: none; border: none; cursor: pointer; font-family: inherit;
+  }
+  .fr-tool-link:hover, .fr-tool-link:focus-visible { text-decoration: underline; }
+  .fr-search-bar { display: flex; align-items: center; flex-wrap: wrap; flex: none; width: 300px; max-width: 100%; }
+  .fr-search-bar .fr-label {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+  .fr-search-bar .fr-input {
+    flex: 1; background: #232323; border: 1px solid var(--border-dim); border-right: none; color: #fff;
+    font-family: "Marianne", Arial, sans-serif; font-weight: 300; font-size: 15px;
+    padding: 10px 14px; border-radius: 3px 0 0 3px;
+  }
+  .fr-search-bar .fr-input::placeholder { color: #8f8f8f; }
+  .fr-search-bar .fr-input:focus { outline: none; border-color: var(--accent); }
+  .fr-search-bar .fr-messages-group { width: 100%; order: 3; font-size: 12.5px; }
+  .fr-search-bar .fr-btn {
+    background: var(--accent); border: none; color: #fff; width: 42px; height: 40px;
+    border-radius: 0 3px 3px 0; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 0; flex: none; transition: background 0.15s ease;
+  }
+  .fr-search-bar .fr-btn::before { content: "🔍"; font-size: 16px; }
+  .fr-search-bar .fr-btn:hover, .fr-search-bar .fr-btn:focus-visible { background: var(--accent-hover); }
+
+  .fr-nav { border-top: 1px solid var(--border-dim); position: relative; }
+  .fr-nav__list { list-style: none; margin: 0 auto; padding: 0 24px; max-width: 1280px; display: flex; flex-wrap: wrap; }
+  .fr-nav__item { position: static; }
+  .fr-nav__btn, .fr-nav__link {
+    font-family: "Marianne", Arial, sans-serif;
+    display: flex; align-items: center; gap: 7px;
+    background: none; border: none; color: #fff; text-decoration: none;
+    font-size: 15px; font-weight: 500; padding: 15px 18px;
+    border-bottom: 3px solid transparent; cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .fr-nav__btn:hover, .fr-nav__btn:focus-visible,
+  .fr-nav__link:hover, .fr-nav__link:focus-visible { border-color: var(--accent); }
+  .fr-nav__btn:focus-visible, .fr-nav__link:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .fr-nav__btn::after { content: "▾"; font-size: 10px; color: var(--text-dim); transition: transform 0.15s ease; }
+  .fr-nav__btn[aria-expanded="true"] { border-color: var(--accent); }
+  .fr-nav__btn[aria-expanded="true"]::after { transform: rotate(180deg); }
+  .fr-collapse.fr-mega-menu {
+    display: none; position: absolute; top: 100%; left: 0; right: 0;
+    background: #fff; color: #161616; box-shadow: 0 16px 32px rgba(0,0,0,0.18); z-index: 30;
+  }
+  .fr-collapse.fr-mega-menu.fr-collapse--expanded { display: block; }
+  .mega-inner { max-width: 1280px; margin: 0 auto; padding: 32px 24px 44px; position: relative; }
+  .fr-btn--close {
+    position: absolute; top: 28px; right: 24px; background: none; border: none; color: var(--accent-dark);
+    font-family: "Marianne", Arial, sans-serif; font-size: 14.5px; font-weight: 500;
+    display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 4px 2px;
+  }
+  .fr-btn--close::after { content: "×"; font-size: 18px; line-height: 1; }
+  .fr-btn--close:hover, .fr-btn--close:focus-visible { color: var(--accent-hover); }
+  .fr-grid-row { display: flex; flex-wrap: wrap; gap: 32px 40px; padding-right: 160px; }
+  .fr-mega-menu__leader { flex: 1 1 260px; max-width: 320px; }
+  .fr-mega-menu__leader .fr-h4 { font-size: 22px; font-weight: 700; margin: 0 0 10px; }
+  .fr-mega-menu__leader p { font-size: 14.5px; font-weight: 300; color: #4a4a4a; line-height: 1.55; margin: 0 0 14px; }
+  .fr-mega-menu__leader .fr-link {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 14.5px; font-weight: 500;
+    color: var(--accent-dark); text-decoration: underline;
+  }
+  .fr-mega-menu__leader .fr-link:hover { color: var(--accent-hover); }
+  .fr-mega-menu__category-col { flex: 1 1 200px; max-width: 260px; }
+  .fr-mega-menu__category { margin: 0 0 12px; padding-bottom: 10px; border-bottom: 1px solid #e2e2e2; }
+  .fr-mega-menu__category .fr-nav__link {
+    color: #161616; font-size: 15px; font-weight: 700; padding: 0; border-bottom: none; display: block;
+  }
+  .fr-mega-menu__category .fr-nav__link:hover { color: var(--accent-dark); }
+  .fr-mega-menu__list { list-style: none; margin: 0; padding: 0; }
+  .fr-mega-menu__list li + li { margin-top: 2px; }
+  .fr-mega-menu__list .fr-nav__link {
+    color: #3a3a3a; font-size: 14.5px; font-weight: 400; padding: 8px 0; border-bottom: none; display: block;
+  }
+  .fr-mega-menu__list .fr-nav__link:hover, .fr-mega-menu__list .fr-nav__link[aria-current="page"] { color: var(--accent-dark); }
+  .fr-mega-menu__list .fr-nav__link[aria-current="page"] { font-weight: 500; }
+  .fr-nav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 25; }
+  .fr-nav-overlay.is-open { display: block; }
+
+  @media (max-width: 640px) {
+    .fr-header__body { padding: 14px 0; }
+    .fr-search-bar { width: 100%; }
+    .fr-header__actions { align-items: flex-start; width: 100%; }
+    .fr-nav__list { padding: 0 8px; overflow-x: auto; }
+    .fr-nav__btn, .fr-nav__link { padding: 13px 12px; white-space: nowrap; }
+    .fr-grid-row { padding-right: 0; flex-direction: column; }
+    .fr-btn--close { position: static; margin-bottom: 20px; }
+  }
+
+  .auth-wrap { max-width: 420px; margin: 60px auto; padding: 0 24px; }
+  .auth-title { font-size: 26px; font-weight: 700; margin: 0 0 8px; }
+  .auth-subtitle { font-size: 14px; color: var(--text-dim); font-weight: 300; margin: 0 0 28px; }
+
+  .auth-tabs { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 1px solid var(--border-dim); }
+  .auth-tab {
+    background: none; border: none; color: var(--text-dim); font-family: inherit;
+    font-size: 14.5px; font-weight: 500; padding: 10px 16px; cursor: pointer;
+    border-bottom: 3px solid transparent;
+  }
+  .auth-tab.active { color: #fff; border-bottom-color: var(--accent); }
+
+  .auth-field { margin-bottom: 18px; }
+  .auth-field label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .auth-field .fr-hint { display: block; font-size: 12.5px; color: var(--text-dim); font-weight: 300; margin-bottom: 6px; }
+  .auth-field input {
+    width: 100%; font-family: "Marianne", Arial, sans-serif; font-size: 15px;
+    padding: 11px 12px; background: #232323; border: none; border-bottom: 2px solid var(--border-dim);
+    border-radius: 2px 2px 0 0; color: #fff;
+  }
+  .auth-field input:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+
+  .auth-btn {
+    width: 100%; background: var(--accent-dark); color: #fff; border: none; border-radius: 3px;
+    padding: 13px; font-family: inherit; font-size: 15px; font-weight: 500; cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .auth-btn:hover, .auth-btn:focus-visible { background: var(--accent-hover); }
+  .auth-btn:disabled { background: #555; cursor: not-allowed; }
+
+  .auth-message { margin-top: 14px; padding: 12px 14px; border-radius: 3px; font-size: 13.5px; display: none; }
+  .auth-message.error { display: block; background: #3a1f1f; color: var(--erreur); border-left: 3px solid var(--erreur); }
+  .auth-message.success { display: block; background: #1f3a26; color: var(--succes); border-left: 3px solid var(--succes); }
+
+  .backend-warning {
+    margin-top: 24px; padding: 14px 16px; background: #2a2410; border-left: 3px solid #d4a017;
+    color: #e8c766; font-size: 13px; border-radius: 0 3px 3px 0; display: none;
+  }
+
+  .mail-app { display: none; max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
+  .mail-app.is-visible { display: block; }
+  .auth-wrap.is-hidden { display: none; }
+
+  .mail-topbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+  .mail-topbar h1 { font-size: 24px; font-weight: 700; margin: 0; }
+  .mail-address { font-size: 13.5px; color: var(--text-dim); font-weight: 300; margin-top: 4px; }
+  .mail-address strong { color: var(--accent-hover); font-weight: 500; }
+
+  .mail-layout { display: flex; gap: 24px; align-items: flex-start; }
+  .mail-sidebar { flex: none; width: 200px; display: flex; flex-direction: column; gap: 4px; }
+  .mail-sidebar button {
+    text-align: left; background: none; border: none; color: var(--text-dim); font-family: inherit;
+    font-size: 14.5px; font-weight: 500; padding: 10px 14px; border-radius: 3px; cursor: pointer;
+  }
+  .mail-sidebar button:hover { background: #232323; color: #fff; }
+  .mail-sidebar button.active { background: var(--accent-dark); color: #fff; }
+  .mail-sidebar .compose-btn { background: var(--accent); color: #fff; margin-bottom: 12px; font-weight: 700; }
+  .mail-sidebar .compose-btn:hover { background: var(--accent-hover); }
+
+  .mail-main { flex: 1; min-width: 0; background: var(--panel-bg); border: 1px solid var(--border-dim); border-radius: 4px; min-height: 420px; }
+
+  .mail-list { list-style: none; margin: 0; padding: 0; }
+  .mail-list li { border-bottom: 1px solid var(--border-dim); padding: 14px 18px; cursor: pointer; display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+  .mail-list li:hover { background: #232323; }
+  .mail-list li.unread .mail-from, .mail-list li.unread .mail-subject { font-weight: 700; color: #fff; }
+  .mail-from { font-size: 13.5px; color: var(--text-dim); flex: none; width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mail-subject { font-size: 14.5px; color: #ddd; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mail-date { font-size: 12.5px; color: var(--text-dim); flex: none; }
+  .mail-empty { padding: 40px 24px; text-align: center; color: var(--text-dim); font-size: 14px; }
+
+  .mail-detail { padding: 24px; }
+  .mail-detail-back { background: none; border: none; color: var(--accent-hover); font-family: inherit; font-size: 13.5px; cursor: pointer; margin-bottom: 18px; }
+  .mail-detail h2 { font-size: 19px; font-weight: 700; margin: 0 0 10px; }
+  .mail-detail .meta { font-size: 13px; color: var(--text-dim); margin-bottom: 20px; }
+  .mail-detail .meta strong { color: #ddd; font-weight: 500; }
+  .mail-detail .body { font-size: 15px; line-height: 1.6; color: #e2e2e2; white-space: pre-wrap; }
+
+  .compose-form { padding: 24px; }
+  .compose-field { margin-bottom: 16px; }
+  .compose-field label { display: block; font-size: 13.5px; font-weight: 700; margin-bottom: 6px; }
+  .compose-field input, .compose-field textarea {
+    width: 100%; font-family: "Marianne", Arial, sans-serif; font-size: 15px;
+    padding: 11px 12px; background: #232323; border: none; border-bottom: 2px solid var(--border-dim);
+    border-radius: 2px 2px 0 0; color: #fff;
+  }
+  .compose-field textarea { min-height: 180px; resize: vertical; font-family: inherit; }
+  .compose-field input:focus, .compose-field textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .compose-hint { font-size: 12.5px; color: var(--text-dim); margin-top: 4px; }
+
+  @media (max-width: 720px) {
+    .mail-layout { flex-direction: column; }
+    .mail-sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; }
+    .mail-from { width: 100px; }
+  }
+</style>
+</head>
+<body>
+
+  <header role="banner" class="fr-header">
+    <div class="fr-header__body">
+      <div class="fr-container">
+        <div class="fr-header__body-row">
+
+          <div class="fr-header__identity">
+            <div class="logo-placeholder" aria-hidden="true">LOGO</div>
+            <a href="index.html" class="fr-header__brand-link" title="Accueil - Préfecture RP de Martinique">
+              <p class="fr-logo">Les services de l'État<br>en Martinique</p>
+            </a>
+          </div>
+
+          <div class="fr-header__actions">
+            <div class="fr-header__tools">
+              <button id="logout-btn" class="fr-tool-link" style="display:none;">⎋ Se déconnecter</button>
+              <a href="#" class="fr-tool-link">⚙ Paramètres d'affichage</a>
+            </div>
+            <div class="fr-search-bar" role="search">
+              <label class="fr-label" for="search-input">Rechercher</label>
+              <input class="fr-input" aria-describedby="search-input-messages" placeholder="Rechercher" id="search-input" type="search">
+              <div class="fr-messages-group" id="search-input-messages" aria-live="polite"></div>
+              <button title="Rechercher" type="submit" class="fr-btn">Rechercher</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <nav class="fr-nav" role="navigation" aria-label="Menu principal">
+      <ul class="fr-nav__list">
+
+        <li class="fr-nav__item">
+          <button class="fr-nav__btn" aria-expanded="false" aria-controls="mega-menu-actualites">Actualités</button>
+          <div class="fr-collapse fr-mega-menu" id="mega-menu-actualites" tabindex="-1">
+            <div class="mega-inner">
+              <button class="fr-btn--close" aria-controls="mega-menu-actualites">Fermer</button>
+              <div class="fr-grid-row">
+                <div class="fr-mega-menu__leader">
+                  <h4 class="fr-h4">Actualités</h4>
+                  <p>Toute l'actualité de la préfecture : annonces officielles et informations brèves.</p>
+                  <a class="fr-link" href="#">Voir toute la rubrique →</a>
+                </div>
+                <div class="fr-mega-menu__category-col">
+                  <h5 class="fr-mega-menu__category"><a class="fr-nav__link" href="#">À la une</a></h5>
+                  <ul class="fr-mega-menu__list">
+                    <li><a class="fr-nav__link" href="communiques-presse.html">Communiqués de presse</a></li>
+                    <li><a class="fr-nav__link" href="#">Brèves</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="fr-nav__item">
+          <button class="fr-nav__btn" aria-expanded="false" aria-controls="mega-menu-services">Services de l'État</button>
+          <div class="fr-collapse fr-mega-menu" id="mega-menu-services" tabindex="-1">
+            <div class="mega-inner">
+              <button class="fr-btn--close" aria-controls="mega-menu-services">Fermer</button>
+              <div class="fr-grid-row">
+                <div class="fr-mega-menu__leader">
+                  <h4 class="fr-h4">Services de l'État</h4>
+                  <p>Organisation et fonctionnement des services de la préfecture en Martinique.</p>
+                  <a class="fr-link" href="#">Voir toute la rubrique →</a>
+                </div>
+                <div class="fr-mega-menu__category-col">
+                  <h5 class="fr-mega-menu__category"><a class="fr-nav__link" href="prefecture-martinique.html">Préfecture de la Martinique</a></h5>
+                  <ul class="fr-mega-menu__list">
+                    <li><a class="fr-nav__link" href="organigrammes.html">Organigrammes</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="fr-nav__item">
+          <button class="fr-nav__btn" aria-expanded="false" aria-controls="mega-menu-publications">Publications</button>
+          <div class="fr-collapse fr-mega-menu" id="mega-menu-publications" tabindex="-1">
+            <div class="mega-inner">
+              <button class="fr-btn--close" aria-controls="mega-menu-publications">Fermer</button>
+              <div class="fr-grid-row">
+                <div class="fr-mega-menu__leader">
+                  <h4 class="fr-h4">Publications</h4>
+                  <p>Documents officiels publiés par la préfecture et offres d'emploi.</p>
+                  <a class="fr-link" href="#">Voir toute la rubrique →</a>
+                </div>
+                <div class="fr-mega-menu__category-col">
+                  <h5 class="fr-mega-menu__category"><a class="fr-nav__link" href="#">Documents officiels</a></h5>
+                  <ul class="fr-mega-menu__list">
+                    <li><a class="fr-nav__link" href="recueil-actes-administratifs.html">Recueil des actes administratifs</a></li>
+                    <li><a class="fr-nav__link" href="#">Recrutement</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="fr-nav__item">
+          <button class="fr-nav__btn" aria-expanded="false" aria-controls="mega-menu-demarches">Démarches</button>
+          <div class="fr-collapse fr-mega-menu" id="mega-menu-demarches" tabindex="-1">
+            <div class="mega-inner">
+              <button class="fr-btn--close" aria-controls="mega-menu-demarches">Fermer</button>
+              <div class="fr-grid-row">
+                <div class="fr-mega-menu__leader">
+                  <h4 class="fr-h4">Démarches</h4>
+                  <p>Effectuez vos démarches administratives directement en ligne.</p>
+                  <a class="fr-link" href="#">Voir toute la rubrique →</a>
+                </div>
+                <div class="fr-mega-menu__category-col">
+                  <h5 class="fr-mega-menu__category"><a class="fr-nav__link" href="#">Démarches courantes</a></h5>
+                  <ul class="fr-mega-menu__list">
+                    <li><a class="fr-nav__link" href="demarches-permis-arme.html">Permis de détention d'arme</a></li>
+                    <li><a class="fr-nav__link" href="#">Manifestation</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+      </ul>
+    </nav>
+  </header>
+
+  <div class="fr-nav-overlay" id="fr-nav-overlay"></div>
+
+  <div class="auth-wrap" id="auth-wrap">
+    <h1 class="auth-title">Mail Interne</h1>
+    <p class="auth-subtitle">Connecte-toi ou crée un compte pour accéder à ta boîte @martiniquerp-gouv.</p>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" type="button">Connexion</button>
+      <button class="auth-tab" id="tab-register" type="button">Créer un compte</button>
+    </div>
+
+    <form id="login-form">
+      <div class="auth-field">
+        <label for="login-username">Identifiant</label>
+        <span class="fr-hint">Sans le @martiniquerp-gouv</span>
+        <input type="text" id="login-username" required autocomplete="username">
+      </div>
+      <div class="auth-field">
+        <label for="login-password">Mot de passe</label>
+        <input type="password" id="login-password" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="auth-btn">Se connecter</button>
+    </form>
+
+    <form id="register-form" style="display:none;">
+      <div class="auth-field">
+        <label for="register-username">Choisis ton identifiant</label>
+        <span class="fr-hint">Lettres, chiffres, points, tirets — ce sera ton adresse : identifiant@martiniquerp-gouv</span>
+        <input type="text" id="register-username" required autocomplete="username">
+      </div>
+      <div class="auth-field">
+        <label for="register-password">Choisis un mot de passe</label>
+        <input type="password" id="register-password" required autocomplete="new-password">
+      </div>
+      <button type="submit" class="auth-btn">Créer mon compte</button>
+    </form>
+
+    <div class="auth-message" id="auth-message"></div>
+    <div class="backend-warning" id="backend-warning">
+      ⚠️ L'adresse du serveur du Mail Interne n'est pas encore configurée dans le code de cette page
+      (variable API_BASE_URL) — voir le commentaire dans le script.
+    </div>
+  </div>
+
+  <div class="mail-app" id="mail-app">
+    <div class="mail-topbar">
+      <div>
+        <h1>Mail Interne</h1>
+        <p class="mail-address">Connecté en tant que <strong id="my-address"></strong></p>
+      </div>
+    </div>
+
+    <div class="mail-layout">
+      <div class="mail-sidebar">
+        <button class="compose-btn" id="nav-compose" type="button">✏️ Nouveau message</button>
+        <button class="active" id="nav-inbox" type="button">📥 Boîte de réception</button>
+        <button id="nav-sent" type="button">📤 Messages envoyés</button>
+      </div>
+
+      <div class="mail-main" id="mail-main"></div>
+    </div>
+  </div>
+
+  <script>
+    /* =====================================================================
+       ADRESSE DU BACKEND
+       -----------------------------------------------------------------
+       Une fois le backend (dossier webmail-backend/) hébergé sur Render,
+       colle son URL ici, à la place de "COLLE_URL_DU_BACKEND_MAIL_ICI"
+       (sans le / à la fin).
+    ===================================================================== */
+    const API_BASE_URL = "COLLE_URL_DU_BACKEND_MAIL_ICI";
+
+    const DOMAIN = "martiniquerp-gouv";
+
+    const authWrap = document.getElementById('auth-wrap');
+    const mailApp = document.getElementById('mail-app');
+    const authMessage = document.getElementById('auth-message');
+    const backendWarning = document.getElementById('backend-warning');
+    const logoutBtn = document.getElementById('logout-btn');
+    const myAddressEl = document.getElementById('my-address');
+    const mailMain = document.getElementById('mail-main');
+
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+
+    const navInbox = document.getElementById('nav-inbox');
+    const navSent = document.getElementById('nav-sent');
+    const navCompose = document.getElementById('nav-compose');
+
+    if (API_BASE_URL === "COLLE_URL_DU_BACKEND_MAIL_ICI") {
+      backendWarning.style.display = 'block';
+    }
+
+    tabLogin.addEventListener('click', () => {
+      tabLogin.classList.add('active'); tabRegister.classList.remove('active');
+      loginForm.style.display = 'block'; registerForm.style.display = 'none';
+      authMessage.className = 'auth-message';
+    });
+    tabRegister.addEventListener('click', () => {
+      tabRegister.classList.add('active'); tabLogin.classList.remove('active');
+      registerForm.style.display = 'block'; loginForm.style.display = 'none';
+      authMessage.className = 'auth-message';
+    });
+
+    function afficherMessageAuth(texte, type) {
+      authMessage.textContent = texte;
+      authMessage.className = 'auth-message ' + type;
+    }
+
+    async function appelApi(chemin, options = {}) {
+      const token = localStorage.getItem('mail_token');
+      const headers = Object.assign(
+        { 'Content-Type': 'application/json' },
+        token ? { Authorization: 'Bearer ' + token } : {},
+        options.headers || {}
+      );
+      const response = await fetch(API_BASE_URL + chemin, Object.assign({}, options, { headers }));
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || "Une erreur est survenue.");
+      return data;
+    }
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      afficherMessageAuth('', '');
+      try {
+        const data = await appelApi('/api/login', {
+          method: 'POST',
+          body: JSON.stringify({
+            username: document.getElementById('login-username').value,
+            password: document.getElementById('login-password').value
+          })
+        });
+        localStorage.setItem('mail_token', data.token);
+        localStorage.setItem('mail_username', data.username);
+        entrerDansLaBoiteMail();
+      } catch (err) {
+        afficherMessageAuth(err.message, 'error');
+      }
+    });
+
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      afficherMessageAuth('', '');
+      try {
+        const data = await appelApi('/api/register', {
+          method: 'POST',
+          body: JSON.stringify({
+            username: document.getElementById('register-username').value,
+            password: document.getElementById('register-password').value
+          })
+        });
+        localStorage.setItem('mail_token', data.token);
+        localStorage.setItem('mail_username', data.username);
+        entrerDansLaBoiteMail();
+      } catch (err) {
+        afficherMessageAuth(err.message, 'error');
+      }
+    });
+
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('mail_token');
+      localStorage.removeItem('mail_username');
+      mailApp.classList.remove('is-visible');
+      authWrap.classList.remove('is-hidden');
+      logoutBtn.style.display = 'none';
+    });
+
+    function entrerDansLaBoiteMail() {
+      authWrap.classList.add('is-hidden');
+      mailApp.classList.add('is-visible');
+      logoutBtn.style.display = 'inline-flex';
+      myAddressEl.textContent = localStorage.getItem('mail_username') + '@' + DOMAIN;
+      afficherInbox();
+    }
+
+    function setNavActif(bouton) {
+      [navInbox, navSent].forEach(b => b.classList.remove('active'));
+      if (bouton) bouton.classList.add('active');
+    }
+
+    navInbox.addEventListener('click', () => { setNavActif(navInbox); afficherInbox(); });
+    navSent.addEventListener('click', () => { setNavActif(navSent); afficherSent(); });
+    navCompose.addEventListener('click', () => { setNavActif(null); afficherCompose(); });
+
+    function formatDate(iso) {
+      const d = new Date(iso);
+      return d.toLocaleDateString('fr-FR') + ' à ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    async function afficherInbox() {
+      mailMain.innerHTML = '<div class="mail-empty">Chargement…</div>';
+      try {
+        const messages = await appelApi('/api/inbox');
+        if (messages.length === 0) {
+          mailMain.innerHTML = '<div class="mail-empty">Aucun message reçu pour le moment.</div>';
+          return;
+        }
+        mailMain.innerHTML = '<ul class="mail-list">' + messages.map(m => `
+          <li class="${m.is_read ? '' : 'unread'}" data-id="${m.id}">
+            <span class="mail-from">${m.from_username}@${DOMAIN}</span>
+            <span class="mail-subject">${escapeHtml(m.subject)}</span>
+            <span class="mail-date">${formatDate(m.created_at)}</span>
+          </li>
+        `).join('') + '</ul>';
+        mailMain.querySelectorAll('li[data-id]').forEach(li => {
+          li.addEventListener('click', () => afficherDetail(li.dataset.id, 'inbox'));
+        });
+      } catch (err) {
+        mailMain.innerHTML = `<div class="mail-empty">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function afficherSent() {
+      mailMain.innerHTML = '<div class="mail-empty">Chargement…</div>';
+      try {
+        const messages = await appelApi('/api/sent');
+        if (messages.length === 0) {
+          mailMain.innerHTML = '<div class="mail-empty">Aucun message envoyé pour le moment.</div>';
+          return;
+        }
+        mailMain.innerHTML = '<ul class="mail-list">' + messages.map(m => `
+          <li data-id="${m.id}">
+            <span class="mail-from">À : ${m.to_username}@${DOMAIN}</span>
+            <span class="mail-subject">${escapeHtml(m.subject)}</span>
+            <span class="mail-date">${formatDate(m.created_at)}</span>
+          </li>
+        `).join('') + '</ul>';
+        mailMain.querySelectorAll('li[data-id]').forEach(li => {
+          li.addEventListener('click', () => afficherDetail(li.dataset.id, 'sent'));
+        });
+      } catch (err) {
+        mailMain.innerHTML = `<div class="mail-empty">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function afficherDetail(id, retourVers) {
+      mailMain.innerHTML = '<div class="mail-empty">Chargement…</div>';
+      try {
+        const m = await appelApi('/api/message/' + id);
+        mailMain.innerHTML = `
+          <div class="mail-detail">
+            <button class="mail-detail-back" id="retour-liste">← Retour</button>
+            <h2>${escapeHtml(m.subject)}</h2>
+            <div class="meta">
+              De : <strong>${m.from_username}@${DOMAIN}</strong><br>
+              À : <strong>${m.to_username}@${DOMAIN}</strong><br>
+              ${formatDate(m.created_at)}
+            </div>
+            <div class="body">${escapeHtml(m.body)}</div>
+          </div>
+        `;
+        document.getElementById('retour-liste').addEventListener('click', () => {
+          if (retourVers === 'sent') afficherSent(); else afficherInbox();
+        });
+      } catch (err) {
+        mailMain.innerHTML = `<div class="mail-empty">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    function afficherCompose() {
+      mailMain.innerHTML = `
+        <form class="compose-form" id="compose-form">
+          <div class="compose-field">
+            <label for="compose-to">À</label>
+            <input type="text" id="compose-to" placeholder="identifiant-du-destinataire" required>
+            <div class="compose-hint">Pas besoin d'écrire @${DOMAIN}, juste l'identifiant.</div>
+          </div>
+          <div class="compose-field">
+            <label for="compose-subject">Sujet</label>
+            <input type="text" id="compose-subject" required>
+          </div>
+          <div class="compose-field">
+            <label for="compose-body">Message</label>
+            <textarea id="compose-body" required></textarea>
+          </div>
+          <button type="submit" class="auth-btn" style="width:auto; padding:12px 28px;">Envoyer</button>
+          <div class="auth-message" id="compose-message"></div>
+        </form>
+      `;
+      document.getElementById('compose-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const msgBox = document.getElementById('compose-message');
+        msgBox.className = 'auth-message';
+        try {
+          await appelApi('/api/send', {
+            method: 'POST',
+            body: JSON.stringify({
+              to: document.getElementById('compose-to').value,
+              subject: document.getElementById('compose-subject').value,
+              body: document.getElementById('compose-body').value
+            })
+          });
+          msgBox.textContent = 'Message envoyé.';
+          msgBox.className = 'auth-message success';
+          document.getElementById('compose-form').reset();
+        } catch (err) {
+          msgBox.textContent = err.message;
+          msgBox.className = 'auth-message error';
+        }
+      });
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str || '';
+      return div.innerHTML;
+    }
+
+    if (localStorage.getItem('mail_token')) {
+      entrerDansLaBoiteMail();
+    }
+
+    const navButtons = document.querySelectorAll('.fr-nav__btn');
+    const overlay = document.getElementById('fr-nav-overlay');
+
+    function closeAllMenus() {
+      navButtons.forEach(btn => {
+        btn.setAttribute('aria-expanded', 'false');
+        document.getElementById(btn.getAttribute('aria-controls')).classList.remove('fr-collapse--expanded');
+      });
+      overlay.classList.remove('is-open');
+    }
+
+    navButtons.forEach(btn => {
+      const panel = document.getElementById(btn.getAttribute('aria-controls'));
+      btn.addEventListener('click', () => {
+        const alreadyOpen = btn.getAttribute('aria-expanded') === 'true';
+        closeAllMenus();
+        if (!alreadyOpen) {
+          btn.setAttribute('aria-expanded', 'true');
+          panel.classList.add('fr-collapse--expanded');
+          overlay.classList.add('is-open');
+        }
+      });
+      panel.querySelector('.fr-btn--close').addEventListener('click', closeAllMenus);
+    });
+
+    overlay.addEventListener('click', closeAllMenus);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAllMenus(); });
+  </script>
+
+</body>
+</html>
