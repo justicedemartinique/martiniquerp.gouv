@@ -63,7 +63,7 @@
     border-radius: 0 3px 3px 0; cursor: pointer; display: flex; align-items: center; justify-content: center;
     font-size: 0; flex: none; transition: background 0.15s ease;
   }
-  .fr-search-bar .fr-btn::before { content: "🔍"; font-size: 16px; }
+  .fr-search-bar .fr-btn svg { width: 16px; height: 16px; }
   .fr-search-bar .fr-btn:hover, .fr-search-bar .fr-btn:focus-visible { background: var(--accent-hover); }
 
   .fr-nav { border-top: 1px solid var(--border-dim); position: relative; }
@@ -234,6 +234,20 @@
   .mail-detail .meta strong { color: #ddd; font-weight: 500; }
   .mail-detail .body { font-size: 15px; line-height: 1.65; color: #e2e2e2; white-space: pre-wrap; }
 
+  .mail-attachment {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: #232323; border: 1px solid var(--border-dim); border-radius: 4px;
+    padding: 10px 14px; margin-bottom: 20px; color: var(--accent-hover);
+  }
+  .mail-attachment svg { flex: none; color: var(--text-dim); }
+  .mail-attachment a { color: var(--accent-hover); text-decoration: none; font-size: 14px; font-weight: 500; }
+  .mail-attachment a:hover { text-decoration: underline; }
+
+  .compose-field input[type="file"] {
+    background: none; border: 1px dashed var(--border-dim); border-radius: 3px;
+    padding: 10px 12px; color: var(--text-dim); font-size: 13.5px;
+  }
+
   .compose-form { padding: 28px 32px; max-width: 560px; }
   .compose-form h2 { font-size: 19px; font-weight: 700; margin: 0 0 20px; }
   .compose-field { margin-bottom: 16px; }
@@ -277,14 +291,14 @@
 
           <div class="fr-header__actions">
             <div class="fr-header__tools">
-              <button id="logout-btn" class="fr-tool-link" style="display:none;">⎋ Se déconnecter</button>
-              <a href="#" class="fr-tool-link">⚙ Paramètres d'affichage</a>
+              <button id="logout-btn" class="fr-tool-link" style="display:none;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Se déconnecter</button>
+              <a href="#" class="fr-tool-link"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Paramètres d'affichage</a>
             </div>
             <div class="fr-search-bar" role="search">
               <label class="fr-label" for="search-input">Rechercher</label>
               <input class="fr-input" aria-describedby="search-input-messages" placeholder="Rechercher" id="search-input" type="search">
               <div class="fr-messages-group" id="search-input-messages" aria-live="polite"></div>
-              <button title="Rechercher" type="submit" class="fr-btn">Rechercher</button>
+              <button title="Rechercher" type="submit" class="fr-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
             </div>
           </div>
 
@@ -444,18 +458,45 @@
 
     <div class="mail-layout">
       <div class="mail-sidebar">
-        <button class="compose-btn" id="nav-compose" type="button">✏️ Nouveau message</button>
+        <button class="compose-btn" id="nav-compose" type="button">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          Nouveau message
+        </button>
 
         <div class="sidebar-label">Favoris</div>
         <button class="sidebar-item active" id="nav-inbox" type="button">
-          📥 Boîte de réception <span class="sidebar-badge" id="inbox-badge" style="display:none;"></span>
+          <span class="sidebar-item-label">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+            Boîte de réception
+          </span>
+          <span class="sidebar-badge" id="inbox-badge" style="display:none;"></span>
         </button>
-        <button class="sidebar-item" id="nav-sent" type="button">📤 Éléments envoyés</button>
+        <button class="sidebar-item" id="nav-sent" type="button">
+          <span class="sidebar-item-label">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Éléments envoyés
+          </span>
+        </button>
 
         <div class="sidebar-label">Dossiers</div>
-        <button class="sidebar-item is-disabled" type="button" disabled title="Bientôt disponible">📝 Brouillons</button>
-        <button class="sidebar-item is-disabled" type="button" disabled title="Bientôt disponible">🗑️ Éléments supprimés</button>
-        <button class="sidebar-item is-disabled" type="button" disabled title="Bientôt disponible">🗄️ Archive</button>
+        <button class="sidebar-item is-disabled" type="button" disabled title="Bientôt disponible">
+          <span class="sidebar-item-label">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Brouillons
+          </span>
+        </button>
+        <button class="sidebar-item is-disabled" type="button" disabled title="Bientôt disponible">
+          <span class="sidebar-item-label">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            Éléments supprimés
+          </span>
+        </button>
+        <button class="sidebar-item is-disabled" type="button" disabled title="Bientôt disponible">
+          <span class="sidebar-item-label">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+            Archive
+          </span>
+        </button>
       </div>
 
       <div class="mail-list-col" id="mail-list-col"></div>
@@ -675,6 +716,12 @@
       afficherEtatVide('Chargement…');
       try {
         const m = await appelApi('/api/message/' + id);
+        const pieceJointe = m.attachment_url
+          ? `<div class="mail-attachment">
+               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+               <a href="${m.attachment_url}" target="_blank" rel="noopener">${escapeHtml(m.attachment_name || 'Pièce jointe')}</a>
+             </div>`
+          : '';
         mailReadingCol.innerHTML = `
           <div class="mail-detail">
             <h2>${escapeHtml(m.subject)}</h2>
@@ -683,6 +730,7 @@
               À : <strong>${m.to_username}@${DOMAIN}</strong><br>
               ${formatDate(m.created_at)}
             </div>
+            ${pieceJointe}
             <div class="body">${escapeHtml(m.body)}</div>
           </div>
         `;
@@ -713,29 +761,59 @@
             <label for="compose-body">Message</label>
             <textarea id="compose-body" required></textarea>
           </div>
-          <button type="submit" class="auth-btn" style="width:auto; padding:12px 28px;">Envoyer</button>
+          <div class="compose-field">
+            <label for="compose-attachment">Pièce jointe</label>
+            <input type="file" id="compose-attachment">
+            <div class="compose-hint">10 Mo maximum.</div>
+          </div>
+          <button type="submit" class="auth-btn" id="compose-submit-btn" style="width:auto; padding:12px 28px;">Envoyer</button>
           <div class="auth-message" id="compose-message"></div>
         </form>
       `;
       document.getElementById('compose-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const msgBox = document.getElementById('compose-message');
+        const submitBtn = document.getElementById('compose-submit-btn');
         msgBox.className = 'auth-message';
+
+        const fichier = document.getElementById('compose-attachment').files[0];
+        const TAILLE_MAX = 10 * 1024 * 1024;
+        if (fichier && fichier.size > TAILLE_MAX) {
+          msgBox.textContent = "Le fichier dépasse 10 Mo.";
+          msgBox.className = 'auth-message error';
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append('to', document.getElementById('compose-to').value);
+        formData.append('subject', document.getElementById('compose-subject').value);
+        formData.append('body', document.getElementById('compose-body').value);
+        if (fichier) formData.append('attachment', fichier);
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Envoi en cours…';
+
         try {
-          await appelApi('/api/send', {
+          const token = localStorage.getItem('mail_token');
+          const response = await fetch(API_BASE_URL + '/api/send', {
             method: 'POST',
-            body: JSON.stringify({
-              to: document.getElementById('compose-to').value,
-              subject: document.getElementById('compose-subject').value,
-              body: document.getElementById('compose-body').value
-            })
+            headers: token ? { Authorization: 'Bearer ' + token } : {},
+            // Pas de Content-Type ici : le navigateur le fixe lui-même avec la
+            // bonne "boundary" pour le multipart/form-data (fichier inclus).
+            body: formData
           });
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok) throw new Error(data.error || "Une erreur est survenue.");
+
           msgBox.textContent = 'Message envoyé.';
           msgBox.className = 'auth-message success';
           document.getElementById('compose-form').reset();
         } catch (err) {
           msgBox.textContent = err.message;
           msgBox.className = 'auth-message error';
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Envoyer';
         }
       });
     }
