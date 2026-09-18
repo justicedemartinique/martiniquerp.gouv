@@ -2,6 +2,13 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<script>
+  // Applique le thème mémorisé avant l'affichage de la page, pour éviter un flash.
+  (function() {
+    var t = localStorage.getItem('site-theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script>
 <title>Permis de détention d'arme — Préfecture de la Martinique</title>
 <style>
   @font-face { font-family: "Marianne"; src: url("fonts/Marianne-Light.woff2") format("woff2"); font-weight: 300; }
@@ -20,10 +27,28 @@
     --gris-bordure: #444;
     --erreur: #ff6b6b;
     --succes: #4ade80;
+    --page-bg: #161616;
+    --text-primary: #f5f5f5;
+    --bg-card: #1f1f1f;
+    --bg-card-hover: #1c1c1c;
+    --bg-input: #232323;
+  }
+  /* Thème clair, activé via le bouton "Paramètres d'affichage" (attribut data-theme sur <html>) */
+  :root[data-theme="light"] {
+    --accent: #000091;
+    --accent-hover: #1212b3;
+    --border-dim: #ddd;
+    --text-dim: #4a4a4a;
+    --page-bg: #ffffff;
+    --text-primary: #1a1a1a;
+    --bg-card: #f6f6f6;
+    --bg-card-hover: #eef0ff;
+    --bg-input: #f0f0f0;
   }
 
+
   * { box-sizing: border-box; }
-  body { margin: 0; font-family: "Marianne", Arial, sans-serif; color: #f5f5f5; background: #161616; }
+  body { margin: 0; font-family: "Marianne", Arial, sans-serif; background: var(--page-bg); color: var(--text-primary); }
 
   /* =========================================
      EN-TÊTE (identique aux autres pages)
@@ -45,7 +70,9 @@
   .fr-tool-link {
     display: inline-flex; align-items: center; gap: 7px; color: var(--accent-hover);
     text-decoration: none; font-size: 14px; font-weight: 500; white-space: nowrap;
+    background: none; border: none; cursor: pointer; font-family: inherit; padding: 0;
   }
+  .fr-tool-link svg { flex: none; }
   .fr-tool-link:hover, .fr-tool-link:focus-visible { text-decoration: underline; }
   .fr-search-bar { display: flex; align-items: center; flex-wrap: wrap; flex: none; width: 300px; max-width: 100%; }
   .fr-search-bar .fr-label {
@@ -181,15 +208,14 @@
     font-family: "Marianne", Arial, sans-serif;
     font-size: 15px;
     padding: 11px 12px;
-    background: #232323;
-    color: #f5f5f5;
+    background: var(--bg-input);
+    color: var(--text-primary);
     border: none;
-    border-bottom: 2px solid #555;
+    border-bottom: 2px solid var(--border-dim);
     border-radius: 2px 2px 0 0;
-    color-scheme: dark;
   }
-  .fr-field select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, #f5f5f5 50%), linear-gradient(135deg, #f5f5f5 50%, transparent 50%); background-position: calc(100% - 20px) center, calc(100% - 14px) center; background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; cursor: pointer; }
-  .fr-field select option { background: #232323; color: #f5f5f5; }
+  .fr-field select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--text-dim) 50%), linear-gradient(135deg, var(--text-dim) 50%, transparent 50%); background-position: calc(100% - 20px) center, calc(100% - 14px) center; background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; cursor: pointer; }
+  .fr-field select option { background: var(--bg-input); color: var(--text-primary); }
   .fr-field textarea { min-height: 140px; resize: vertical; font-family: inherit; }
   .fr-field input:focus, .fr-field select:focus, .fr-field textarea:focus {
     outline: 2px solid var(--accent); outline-offset: 1px; border-bottom-color: var(--accent);
@@ -200,7 +226,7 @@
   .fr-field.cp-ville { margin-bottom: 26px; }
 
   .fr-discord-note {
-    background: #1c1c2e;
+    background: var(--bg-card);
     border-left: 3px solid var(--accent);
     padding: 14px 16px;
     font-size: 13.5px;
@@ -256,8 +282,11 @@
 
           <div class="fr-header__actions">
             <div class="fr-header__tools">
-              <a href="mail-interne.html" class="fr-tool-link">✉ Mail Interne</a>
-              <a href="#" class="fr-tool-link">⚙ Paramètres d'affichage</a>
+              <button type="button" class="fr-tool-link" id="theme-toggle-btn">
+                <svg id="theme-icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+                <svg id="theme-icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+                <span id="theme-toggle-label">Passer en thème clair</span>
+              </button>
             </div>
             <div class="fr-search-bar" role="search">
               <label class="fr-label" for="search-input">Rechercher</label>
@@ -475,6 +504,31 @@
   </main>
 
   <script>
+    // ---- bascule thème sombre / clair ----
+    const themeBtn = document.getElementById('theme-toggle-btn');
+    const themeSun = document.getElementById('theme-icon-sun');
+    const themeMoon = document.getElementById('theme-icon-moon');
+    const themeLabel = document.getElementById('theme-toggle-label');
+
+    function appliquerLibelleTheme() {
+      const clair = document.documentElement.getAttribute('data-theme') === 'light';
+      themeSun.style.display = clair ? 'none' : 'inline';
+      themeMoon.style.display = clair ? 'inline' : 'none';
+      themeLabel.textContent = clair ? 'Passer en thème sombre' : 'Passer en thème clair';
+    }
+    appliquerLibelleTheme();
+
+    themeBtn.addEventListener('click', () => {
+      const clair = document.documentElement.getAttribute('data-theme') === 'light';
+      if (clair) {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('site-theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('site-theme', 'light');
+      }
+      appliquerLibelleTheme();
+    });
     /* =====================================================================
        ENVOI VERS LE BOT DISCORD (via son API, pas de webhook direct)
        -----------------------------------------------------------------
