@@ -174,6 +174,7 @@
   .rubric-subtitle { font-size: 15px; color: var(--text-dim); font-weight: 300; margin: 0 0 32px; }
 
   .organigramme-list { display: flex; flex-direction: column; gap: 0; }
+  .doc-loading { color: var(--text-dim); font-style: italic; font-size: 14px; padding: 12px 0; }
 
   .organigramme-card {
     display: flex;
@@ -396,83 +397,98 @@
     <p class="rubric-subtitle">À lire dans cette rubrique</p>
 
     <!-- =====================================================================
-         LISTE DES ORGANIGRAMMES
+         LISTE AUTOMATIQUE — se remplit toute seule depuis le dossier GitHub
          -----------------------------------------------------------------
-         Même système que le Recueil des actes et les Communiqués de presse :
-         chaque carte pointe directement vers un PDF, ouvert dans un nouvel
-         onglet. L'affiche à gauche est générique et se répète sur toutes
-         les cartes (pas besoin d'image différente par organigramme).
+         Pour AJOUTER un organigramme, PLUS BESOIN DE TOUCHER À CE FICHIER :
+           1. Nomme ton PDF comme ceci :  AAAA-MM-JJ Titre de l'organigramme.pdf
+              (ex: 2026-02-02 Organigramme des chefs de service.pdf)
+           2. Dépose-le dans le dossier "documents/organigrammes/" sur GitHub
+           3. C'est tout — il apparaît automatiquement sur cette page.
 
-         Pour AJOUTER un organigramme :
-           1. Dépose ton PDF dans le dossier "documents/", nom simple sans
-              espaces ni accents (ex: organigramme-prefecture.pdf)
-           2. Copie un bloc <a class="organigramme-card"> entier et colle-le
-           3. Change le "href" -> "documents/nom-de-ton-fichier.pdf"
-           4. Change le texte dans <h2 class="organigramme-title">
-           5. Change le texte dans <p class="organigramme-date">
-
-         Pour EN RETIRER un : supprime son bloc entier.
+         Pour EN RETIRER un : supprime simplement le fichier PDF du dossier
+         GitHub. Rien d'autre à faire.
     ===================================================================== */ -->
-    <div class="organigramme-list">
-
-      <a href="documents/organigramme-chefs-de-service.pdf" target="_blank" class="organigramme-card">
-        <div class="organigramme-thumb" aria-hidden="true">
-          <div class="organigramme-thumb-inner">
-            <div class="l1">Organigramme</div>
-            <div class="l2">des services</div>
-          </div>
-        </div>
-        <div class="organigramme-body">
-          <h2 class="organigramme-title">L'organigramme des chefs de service de l'État en Martinique</h2>
-          <p class="organigramme-date">Publié le 02/02/2026</p>
-        </div>
-        <span class="organigramme-arrow" aria-hidden="true">→</span>
-      </a>
-
-      <a href="documents/organigramme-prefecture-sous-prefectures.pdf" target="_blank" class="organigramme-card">
-        <div class="organigramme-thumb" aria-hidden="true">
-          <div class="organigramme-thumb-inner">
-            <div class="l1">Organigramme</div>
-            <div class="l2">des services</div>
-          </div>
-        </div>
-        <div class="organigramme-body">
-          <h2 class="organigramme-title">L'organigramme de la préfecture et des sous-préfectures</h2>
-          <p class="organigramme-date">Publié le 13/01/2026</p>
-        </div>
-        <span class="organigramme-arrow" aria-hidden="true">→</span>
-      </a>
-
-      <a href="documents/organigramme-ddpn.pdf" target="_blank" class="organigramme-card">
-        <div class="organigramme-thumb" aria-hidden="true">
-          <div class="organigramme-thumb-inner">
-            <div class="l1">Organigramme</div>
-            <div class="l2">des services</div>
-          </div>
-        </div>
-        <div class="organigramme-body">
-          <h2 class="organigramme-title">L'organigramme de la Direction Départementale de la Police Nationale de la Martinique — DDPN</h2>
-          <p class="organigramme-date">Publié le 15/01/2026</p>
-        </div>
-        <span class="organigramme-arrow" aria-hidden="true">→</span>
-      </a>
-
-      <a href="documents/organigramme-gendarmerie.pdf" target="_blank" class="organigramme-card">
-        <div class="organigramme-thumb" aria-hidden="true">
-          <div class="organigramme-thumb-inner">
-            <div class="l1">Organigramme</div>
-            <div class="l2">des services</div>
-          </div>
-        </div>
-        <div class="organigramme-body">
-          <h2 class="organigramme-title">L'organigramme du groupement de gendarmerie départementale de la Martinique</h2>
-          <p class="organigramme-date">Publié le 19/08/2026</p>
-        </div>
-        <span class="organigramme-arrow" aria-hidden="true">→</span>
-      </a>
-
+    <div class="organigramme-list" id="organigramme-list">
+      <p class="doc-loading">Chargement des organigrammes…</p>
     </div>
   </main>
+
+  <script>
+    /* =====================================================================
+       CONFIGURATION — à remplir une seule fois
+    ===================================================================== */
+    const GITHUB_OWNER = "COLLE_TON_PSEUDO_GITHUB_ICI";
+    const GITHUB_REPO = "COLLE_LE_NOM_DE_TON_DEPOT_ICI";
+    const GITHUB_FOLDER = "documents/organigrammes";
+
+    async function chargerOrganigrammes() {
+      const listeEl = document.getElementById('organigramme-list');
+
+      if (GITHUB_OWNER === "COLLE_TON_PSEUDO_GITHUB_ICI") {
+        listeEl.innerHTML = '<p class="doc-loading">Configuration manquante — voir le commentaire en haut du script de cette page.</p>';
+        return;
+      }
+
+      try {
+        const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FOLDER}`;
+        const reponse = await fetch(url);
+        if (!reponse.ok) throw new Error();
+        const fichiers = await reponse.json();
+
+        const pdfs = fichiers.filter(f => f.name.toLowerCase().endsWith('.pdf'));
+
+        if (pdfs.length === 0) {
+          listeEl.innerHTML = '<p class="doc-loading">Aucun organigramme publié pour le moment.</p>';
+          return;
+        }
+
+        const documents = pdfs.map(f => {
+          const nomSansExtension = f.name.replace(/\.pdf$/i, '');
+          const correspondance = nomSansExtension.match(/^(\d{4}-\d{2}-\d{2})\s+(.+)$/);
+          let dateAffichee = '';
+          let titre = nomSansExtension;
+          let dateTri = '0000-00-00';
+
+          if (correspondance) {
+            dateTri = correspondance[1];
+            const [annee, mois, jour] = correspondance[1].split('-');
+            dateAffichee = `${jour}/${mois}/${annee}`;
+            titre = correspondance[2];
+          }
+
+          return { titre, dateAffichee, dateTri, url: f.download_url };
+        });
+
+        documents.sort((a, b) => b.dateTri.localeCompare(a.dateTri));
+
+        listeEl.innerHTML = documents.map(doc => `
+          <a href="${doc.url}" target="_blank" class="organigramme-card">
+            <div class="organigramme-thumb" aria-hidden="true">
+              <div class="organigramme-thumb-inner">
+                <div class="l1">Organigramme</div>
+                <div class="l2">des services</div>
+              </div>
+            </div>
+            <div class="organigramme-body">
+              <h2 class="organigramme-title">${escapeHtmlDoc(doc.titre)}</h2>
+              <p class="organigramme-date">${doc.dateAffichee ? 'Publié le ' + doc.dateAffichee : ''}</p>
+            </div>
+            <span class="organigramme-arrow" aria-hidden="true">→</span>
+          </a>
+        `).join('');
+      } catch (err) {
+        listeEl.innerHTML = '<p class="doc-loading">Impossible de charger les organigrammes pour le moment.</p>';
+      }
+    }
+
+    function escapeHtmlDoc(texte) {
+      const div = document.createElement('div');
+      div.textContent = texte;
+      return div.innerHTML;
+    }
+
+    chargerOrganigrammes();
+  </script>
 
   <script>
     // ---- bascule thème sombre / clair ----
