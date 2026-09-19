@@ -174,6 +174,7 @@
   .rubric-subtitle { font-size: 15px; color: var(--text-dim); font-weight: 300; margin: 0 0 32px; }
 
   .communique-list { display: flex; flex-direction: column; gap: 0; }
+  .doc-loading { color: var(--text-dim); font-style: italic; font-size: 14px; padding: 12px 0; }
 
   .communique-card {
     display: flex;
@@ -396,57 +397,98 @@
     <p class="rubric-subtitle">À lire dans cette rubrique</p>
 
     <!-- =====================================================================
-         LISTE DES COMMUNIQUÉS DE PRESSE
+         LISTE AUTOMATIQUE — se remplit toute seule depuis le dossier GitHub
          -----------------------------------------------------------------
-         Même système que pour le Recueil des actes administratifs : chaque
-         carte pointe directement vers un PDF, qui s'ouvre dans un nouvel
-         onglet (pas de page article séparée).
+         Pour AJOUTER un communiqué, PLUS BESOIN DE TOUCHER À CE FICHIER :
+           1. Nomme ton PDF comme ceci :  AAAA-MM-JJ Titre du communiqué.pdf
+              (ex: 2026-08-27 Prise de fonction du préfet.pdf)
+           2. Dépose-le dans le dossier "documents/communiques/" sur GitHub
+           3. C'est tout — il apparaît automatiquement sur cette page.
 
-         Pour AJOUTER un communiqué :
-           1. Dépose ton PDF dans le dossier "documents/" (à côté de ce
-              fichier), avec un nom simple, sans espaces ni accents
-              (ex: communique-feux-de-foret.pdf)
-           2. Copie un bloc <a class="communique-card"> entier (celui juste
-              en dessous) et colle-le juste après
-           3. Change le "href" pour "documents/nom-de-ton-fichier.pdf"
-           4. Change le texte dans <h2 class="communique-title"> -> le titre
-           5. Change le texte dans <p class="communique-date"> -> la date
-
-         Pour EN RETIRER un : supprime son bloc entier.
-         Le plus récent va en premier (tout en haut de la liste).
+         Pour EN RETIRER un : supprime simplement le fichier PDF du dossier
+         GitHub. Rien d'autre à faire.
     ===================================================================== */ -->
-    <div class="communique-list">
-
-      <a href="documents/communique-prisedefonction.pdf" target="_blank" class="communique-card">
-        <div class="communique-thumb" aria-hidden="true">
-          <div class="communique-thumb-inner">
-            <div class="l1">Communiqué</div>
-            <div class="l2">de presse</div>
-          </div>
-        </div>
-        <div class="communique-body">
-          <h2 class="communique-title">Prise de Fonction | Préfet de la Martinique</h2>
-          <p class="communique-date">Publié le 27/08/2026</p>
-        </div>
-        <span class="communique-arrow" aria-hidden="true">→</span>
-      </a>
-
-      <a href="documents/communique-incendie-lamentin.pdf" target="_blank" class="communique-card">
-        <div class="communique-thumb" aria-hidden="true">
-          <div class="communique-thumb-inner">
-            <div class="l1">Communiqué</div>
-            <div class="l2">de presse</div>
-          </div>
-        </div>
-        <div class="communique-body">
-          <h2 class="communique-title">Incendie dans les locaux de l'entreprise Temo au Lamentin</h2>
-          <p class="communique-date">Publié le 08/08/2026</p>
-        </div>
-        <span class="communique-arrow" aria-hidden="true">→</span>
-      </a>
-
+    <div class="communique-list" id="communique-list">
+      <p class="doc-loading">Chargement des communiqués…</p>
     </div>
   </main>
+
+  <script>
+    /* =====================================================================
+       CONFIGURATION — à remplir une seule fois
+    ===================================================================== */
+    const GITHUB_OWNER = "COLLE_TON_PSEUDO_GITHUB_ICI";
+    const GITHUB_REPO = "COLLE_LE_NOM_DE_TON_DEPOT_ICI";
+    const GITHUB_FOLDER = "documents/communiques";
+
+    async function chargerCommuniques() {
+      const listeEl = document.getElementById('communique-list');
+
+      if (GITHUB_OWNER === "COLLE_TON_PSEUDO_GITHUB_ICI") {
+        listeEl.innerHTML = '<p class="doc-loading">Configuration manquante — voir le commentaire en haut du script de cette page.</p>';
+        return;
+      }
+
+      try {
+        const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FOLDER}`;
+        const reponse = await fetch(url);
+        if (!reponse.ok) throw new Error();
+        const fichiers = await reponse.json();
+
+        const pdfs = fichiers.filter(f => f.name.toLowerCase().endsWith('.pdf'));
+
+        if (pdfs.length === 0) {
+          listeEl.innerHTML = '<p class="doc-loading">Aucun communiqué publié pour le moment.</p>';
+          return;
+        }
+
+        const documents = pdfs.map(f => {
+          const nomSansExtension = f.name.replace(/\.pdf$/i, '');
+          const correspondance = nomSansExtension.match(/^(\d{4}-\d{2}-\d{2})\s+(.+)$/);
+          let dateAffichee = '';
+          let titre = nomSansExtension;
+          let dateTri = '0000-00-00';
+
+          if (correspondance) {
+            dateTri = correspondance[1];
+            const [annee, mois, jour] = correspondance[1].split('-');
+            dateAffichee = `${jour}/${mois}/${annee}`;
+            titre = correspondance[2];
+          }
+
+          return { titre, dateAffichee, dateTri, url: f.download_url };
+        });
+
+        documents.sort((a, b) => b.dateTri.localeCompare(a.dateTri));
+
+        listeEl.innerHTML = documents.map(doc => `
+          <a href="${doc.url}" target="_blank" class="communique-card">
+            <div class="communique-thumb" aria-hidden="true">
+              <div class="communique-thumb-inner">
+                <div class="l1">Communiqué</div>
+                <div class="l2">de presse</div>
+              </div>
+            </div>
+            <div class="communique-body">
+              <h2 class="communique-title">${escapeHtmlDoc(doc.titre)}</h2>
+              <p class="communique-date">${doc.dateAffichee ? 'Publié le ' + doc.dateAffichee : ''}</p>
+            </div>
+            <span class="communique-arrow" aria-hidden="true">→</span>
+          </a>
+        `).join('');
+      } catch (err) {
+        listeEl.innerHTML = '<p class="doc-loading">Impossible de charger les communiqués pour le moment.</p>';
+      }
+    }
+
+    function escapeHtmlDoc(texte) {
+      const div = document.createElement('div');
+      div.textContent = texte;
+      return div.innerHTML;
+    }
+
+    chargerCommuniques();
+  </script>
 
   <script>
     // ---- bascule thème sombre / clair ----
