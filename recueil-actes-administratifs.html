@@ -188,6 +188,7 @@
 
   .documents-list { list-style: none; margin: 0; padding: 0; }
   .documents-list li { border-bottom: 1px solid var(--gris-bordure); }
+  .doc-loading { padding: 20px 4px; color: var(--text-dim); font-style: italic; font-size: 14px; border-bottom: none !important; }
 
   .fr-link--download {
     display: flex; align-items: center; justify-content: space-between; gap: 16px;
@@ -347,28 +348,93 @@
       de Martinique, du plus récent au plus ancien.
     </p>
 
-    <!-- Pour ajouter/retirer un document : voir les instructions données précédemment
-         (copier un bloc <li>, changer href/texte/date, ou supprimer le bloc). -->
-    <ul class="documents-list">
+    <!-- =====================================================================
+         LISTE AUTOMATIQUE — se remplit toute seule depuis le dossier GitHub
+         -----------------------------------------------------------------
+         Pour AJOUTER un document, PLUS BESOIN DE TOUCHER À CE FICHIER :
+           1. Nomme ton PDF comme ceci :  AAAA-MM-JJ Titre du document.pdf
+              (ex: 2026-08-27 Recueil R02-2026-265.pdf)
+           2. Dépose-le dans le dossier "documents/recueil/" sur GitHub
+           3. C'est tout — il apparaît automatiquement sur cette page, dans
+              l'ordre du plus récent au plus ancien.
 
-      <li>
-        <a href="documents/arrete-sous-prefecture-trinite.pdf" target="_blank"
-           class="fr-link fr-link--download">
-          Arrêté — Sous-préfecture de la Trinité
-          <span class="fr-link__detail">PDF – 26/08/2026</span>
-        </a>
-      </li>
-
-      <li>
-        <a href="documents/recueil-r02-2026-263-recueil-des-actes-administratifs.pdf" target="_blank"
-           class="fr-link fr-link--download">
-          Recueil R02-2026-263
-          <span class="fr-link__detail">PDF – 22/08/2026</span>
-        </a>
-      </li>
-
+         Pour EN RETIRER un : supprime simplement le fichier PDF du dossier
+         GitHub. Rien d'autre à faire.
+    ===================================================================== */ -->
+    <ul class="documents-list" id="documents-list">
+      <li class="doc-loading">Chargement des documents…</li>
     </ul>
   </main>
+
+  <script>
+    /* =====================================================================
+       CONFIGURATION — à remplir une seule fois
+    ===================================================================== */
+    const GITHUB_OWNER = "COLLE_TON_PSEUDO_GITHUB_ICI";
+    const GITHUB_REPO = "COLLE_LE_NOM_DE_TON_DEPOT_ICI";
+    const GITHUB_FOLDER = "documents/recueil";
+
+    async function chargerDocuments() {
+      const listeEl = document.getElementById('documents-list');
+
+      if (GITHUB_OWNER === "COLLE_TON_PSEUDO_GITHUB_ICI") {
+        listeEl.innerHTML = '<li class="doc-loading">Configuration manquante — voir le commentaire en haut du script de cette page.</li>';
+        return;
+      }
+
+      try {
+        const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FOLDER}`;
+        const reponse = await fetch(url);
+        if (!reponse.ok) throw new Error();
+        const fichiers = await reponse.json();
+
+        const pdfs = fichiers.filter(f => f.name.toLowerCase().endsWith('.pdf'));
+
+        if (pdfs.length === 0) {
+          listeEl.innerHTML = '<li class="doc-loading">Aucun document publié pour le moment.</li>';
+          return;
+        }
+
+        const documents = pdfs.map(f => {
+          const nomSansExtension = f.name.replace(/\.pdf$/i, '');
+          const correspondance = nomSansExtension.match(/^(\d{4}-\d{2}-\d{2})\s+(.+)$/);
+          let dateAffichee = '';
+          let titre = nomSansExtension;
+          let dateTri = '0000-00-00';
+
+          if (correspondance) {
+            dateTri = correspondance[1];
+            const [annee, mois, jour] = correspondance[1].split('-');
+            dateAffichee = `${jour}/${mois}/${annee}`;
+            titre = correspondance[2];
+          }
+
+          return { titre, dateAffichee, dateTri, url: f.download_url };
+        });
+
+        documents.sort((a, b) => b.dateTri.localeCompare(a.dateTri));
+
+        listeEl.innerHTML = documents.map(doc => `
+          <li>
+            <a href="${doc.url}" target="_blank" class="fr-link fr-link--download">
+              ${escapeHtmlDoc(doc.titre)}
+              <span class="fr-link__detail">PDF${doc.dateAffichee ? ' – ' + doc.dateAffichee : ''}</span>
+            </a>
+          </li>
+        `).join('');
+      } catch (err) {
+        listeEl.innerHTML = '<li class="doc-loading">Impossible de charger les documents pour le moment.</li>';
+      }
+    }
+
+    function escapeHtmlDoc(texte) {
+      const div = document.createElement('div');
+      div.textContent = texte;
+      return div.innerHTML;
+    }
+
+    chargerDocuments();
+  </script>
 
   <script>
     // ---- bascule thème sombre / clair ----
