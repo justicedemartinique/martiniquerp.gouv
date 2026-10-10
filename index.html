@@ -227,49 +227,6 @@
 
   @media (max-width: 800px) { .home-cards { grid-template-columns: 1fr; } }
 
-  /* =========================================
-     PIED DE PAGE
-  ========================================== */
-  footer.site-footer { border-top: 4px solid var(--bleu-france); background: var(--gris-fond); font-weight: 300; }
-  .footer-disclaimer {
-    background: #0d0d0d; color: #fff; text-align: center; padding: 14px 16px;
-    font-size: 14px; font-weight: 500; letter-spacing: 0.01em; border-bottom: 3px solid var(--rouge-marianne);
-  }
-  .footer-disclaimer strong { font-weight: 700; color: #ffd6d6; }
-  .footer-main {
-    max-width: 1180px; margin: 0 auto; padding: 40px 24px 24px;
-    display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 32px;
-  }
-  .footer-brand { display: flex; align-items: flex-start; gap: 14px; }
-  .footer-brand .cocarde {
-    width: 40px; height: 40px; flex: none; border-radius: 50%;
-    background: conic-gradient(var(--bleu-france) 0deg 120deg, #fff 120deg 240deg, var(--rouge-marianne) 240deg 360deg);
-    border: 1px solid #444;
-  }
-  .footer-brand-text .nom { font-weight: 700; font-size: 15px; line-height: 1.3; color: var(--text-primary); }
-  .footer-brand-text .sous { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
-  .footer-col h3 {
-    font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin: 0 0 14px; color: var(--text-primary);
-  }
-  .footer-col ul { list-style: none; margin: 0; padding: 0; }
-  .footer-col li { margin-bottom: 9px; }
-  .footer-col a { color: var(--gris-texte); text-decoration: none; font-size: 14px; }
-  .footer-col a:hover, .footer-col a:focus-visible { color: var(--accent-hover); text-decoration: underline; }
-  .footer-bottom {
-    border-top: 1px solid var(--gris-bordure); max-width: 1180px; margin: 0 auto; padding: 18px 24px 28px;
-    display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; justify-content: space-between;
-  }
-  .footer-legal { display: flex; flex-wrap: wrap; gap: 4px 18px; }
-  .footer-legal a { font-size: 12.5px; color: var(--text-dim); text-decoration: none; }
-  .footer-legal a:hover { text-decoration: underline; color: var(--text-primary); }
-  .footer-copy { font-size: 12.5px; color: var(--text-dim); }
-  .footer-copy .fictif-tag { color: #ff8080; font-weight: 700; }
-
-  @media (max-width: 760px) {
-    .footer-main { grid-template-columns: 1fr 1fr; }
-    .footer-brand { grid-column: 1 / -1; }
-    .footer-bottom { flex-direction: column; align-items: flex-start; }
-  }
 </style>
 </head>
 <body>
@@ -431,57 +388,6 @@
       </a>
     </div>
   </main>
-
-  <footer class="site-footer">
-    <div class="footer-disclaimer">
-      <strong>⚠ Site fictif à but de roleplay</strong> — Ce site imite l'esthétique d'un service de l'État à des fins purement ludiques. Il n'est ni édité, ni géré, ni affilié à la préfecture de Martinique ni à aucune administration française réelle.
-    </div>
-
-    <div class="footer-main">
-      <div class="footer-brand">
-        <div class="cocarde" aria-hidden="true"></div>
-        <div class="footer-brand-text">
-          <div class="nom">Préfecture RP de Martinique</div>
-          <div class="sous">Serveur de roleplay — administration fictive</div>
-        </div>
-      </div>
-
-      <div class="footer-col">
-        <h3>Démarches</h3>
-        <ul>
-          <li><a href="demarches-permis-arme.html">Permis de détention d'arme</a></li>
-          <li><a href="#">Manifestation</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h3>La préfecture</h3>
-        <ul>
-          <li><a href="prefecture-martinique.html">Préfecture de la Martinique</a></li>
-          <li><a href="organigrammes.html">Organigrammes</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h3>Publications</h3>
-        <ul>
-          <li><a href="recueil-actes-administratifs.html">Recueil des actes administratifs</a></li>
-          <li><a href="#">Recrutement</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <div class="footer-legal">
-        <a href="#">Mentions légales (fictives)</a>
-        <a href="#">À propos du RP</a>
-        <a href="#">Accessibilité</a>
-      </div>
-      <div class="footer-copy">
-        <span class="fictif-tag">FICTIF</span> · Aucune valeur administrative réelle · © Serveur RP 2026
-      </div>
-    </div>
-  </footer>
 
   <script>
     // ---- bascule thème sombre / clair ----
