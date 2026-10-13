@@ -62,7 +62,7 @@
   body { margin: 0; font-family: "Marianne", Arial, sans-serif; background: var(--page-bg); color: var(--text-primary); }
 
   /* =========================================
-      EN-TÊTE
+     EN-TÊTE
   ========================================== */
   .fr-header { background: var(--header-bg); color: var(--header-text); position: sticky; top: 0; z-index: 60; transition: background 0.15s ease, color 0.15s ease; }
   .fr-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
@@ -71,16 +71,23 @@
 
   .fr-header__identity { display: flex; align-items: center; gap: 14px; }
 
+  /* =====================================================================
+     EMPLACEMENT LOGO
+     -----------------------------------------------------------------
+     Remplace ce bloc par ta propre image : <img src="documents/logo.png"
+     alt="Logo"> à la place du <div class="logo-placeholder">. Garde une
+     image carrée ou proche (ex: 56x56px) pour que ça s'aligne bien.
+  ===================================================================== */
   .logo-placeholder {
-    width: 52px;
-    height: 52px;
+    width: 140px;
+    height: 80px;
     flex: none;
     border: 2px dashed var(--border-dim);
     border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 500;
     color: var(--text-dim);
     text-align: center;
@@ -122,7 +129,7 @@
   .fr-search-bar .fr-btn:hover, .fr-search-bar .fr-btn:focus-visible { background: var(--accent-hover); }
 
   /* =========================================
-      MEGA-MENU — barre horizontale
+     MEGA-MENU — barre horizontale
   ========================================== */
   .fr-nav { border-top: 1px solid var(--border-dim); position: relative; }
   .fr-nav__list { list-style: none; margin: 0 auto; padding: 0 24px; max-width: 1280px; display: flex; flex-wrap: wrap; }
@@ -197,7 +204,7 @@
   }
 
   /* =========================================
-      CONTENU DE LA PAGE D'ACCUEIL
+     CONTENU DE LA PAGE D'ACCUEIL
   ========================================== */
   main { max-width: 1180px; margin: 0 auto; padding: 48px 24px 64px; }
   .home-intro { max-width: 640px; margin-bottom: 40px; }
@@ -222,7 +229,7 @@
 
 
   /* =========================================
-      PIED DE PAGE (identique sur toutes les pages)
+     PIED DE PAGE (identique sur toutes les pages, sans logo)
   ========================================== */
   body { display: flex; flex-direction: column; min-height: 100vh; }
   main { width: 100%; flex: 1 0 auto; }
@@ -238,8 +245,13 @@
     gap: 20px 40px; padding-bottom: 28px; border-bottom: 1px solid var(--border-dim);
   }
   .footer-title { margin: 0; font-size: 16px; font-weight: 700; line-height: 1.3; }
-  .footer-brand { display: flex; align-items: center; gap: 16px; }
-  .footer-logo-img { height: 72px; width: auto; flex: none; display: block; }
+  .footer-brand { display: flex; align-items: center; flex-wrap: wrap; gap: 16px 20px; }
+  .footer-logo-placeholder {
+    width: 170px; height: 110px; flex: none; border: 2px dashed var(--border-dim); border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 500; color: var(--text-dim); text-align: center; line-height: 1.2;
+  }
+  .footer-logo-img { height: 110px; width: auto; flex: none; display: block; }
   .footer-links { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 12px 32px; }
   .footer-links a {
     display: inline-flex; align-items: center; gap: 6px;
@@ -247,6 +259,14 @@
   }
   .footer-links a:hover, .footer-links a:focus-visible { color: var(--accent); text-decoration: underline; }
   .footer-links svg { flex: none; }
+
+  /* Logo de l'en-tête : taille agrandie (remplace le cadre par <img src="..." alt="Logo" class="header-logo-img">) */
+  .fr-header__identity { flex-wrap: wrap; }
+  .header-logo-img { height: 80px; width: auto; flex: none; display: block; }
+  @media (max-width: 640px) {
+    .logo-placeholder { width: 100px; height: 60px; }
+    .header-logo-img { height: 60px; }
+  }
 </style>
 </head>
 <body>
@@ -257,8 +277,7 @@
         <div class="fr-header__body-row">
 
           <div class="fr-header__identity">
-            <!-- LOGO EN-TÊTE : Remplacé par l'image -->
-            <img src="documents/logo.png" alt="Logo Préfecture" class="footer-logo-img" style="height: 52px;">
+            <div class="logo-placeholder" aria-hidden="true">LOGO</div>
             <a href="index.html" class="fr-header__brand-link" title="Accueil - Préfecture RP de Martinique">
               <p class="fr-logo">Les services de l'État<br>en Martinique</p>
             </a>
@@ -414,8 +433,10 @@
     <div class="footer-inner">
       <div class="footer-top">
         <div class="footer-brand">
-          <!-- LOGO PIED DE PAGE : Remplacé par l'image -->
-          <img src="documents/logo.png" alt="Logo Préfecture" class="footer-logo-img">
+          <!-- EMPLACEMENT LOGO : remplace la ligne ci-dessous par
+               <img src="documents/logo.png" alt="Logo" class="footer-logo-img">
+               (ou le nom de ton image) -->
+          <div class="footer-logo-placeholder" aria-hidden="true">LOGO</div>
           <p class="footer-title">Les services de l'État<br>en Martinique</p>
         </div>
         <ul class="footer-links">
