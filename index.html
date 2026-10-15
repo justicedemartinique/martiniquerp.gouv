@@ -71,7 +71,13 @@
 
   .fr-header__identity { display: flex; align-items: center; gap: 14px; }
 
-<img src="documents/logo.png"
+  /* =====================================================================
+     EMPLACEMENT LOGO
+     -----------------------------------------------------------------
+     Remplace ce bloc par ta propre image : <img src="documents/logo.png"
+     alt="Logo"> à la place du <div class="logo-placeholder">. Garde une
+     image carrée ou proche (ex: 56x56px) pour que ça s'aligne bien.
+  ===================================================================== */
   .logo-placeholder {
     width: 140px;
     height: 80px;
@@ -271,7 +277,7 @@
         <div class="fr-header__body-row">
 
           <div class="fr-header__identity">
-            <div class="logo-placeholder" aria-hidden="true">LOGO</div>
+            <img src="documents/logo.png" alt="Logo" class="header-logo-img" onerror="this.onerror=null;this.src='logo.png';">
             <a href="index.html" class="fr-header__brand-link" title="Accueil - Préfecture RP de Martinique">
               <p class="fr-logo">Les services de l'État<br>en Martinique</p>
             </a>
@@ -427,10 +433,7 @@
     <div class="footer-inner">
       <div class="footer-top">
         <div class="footer-brand">
-          <!-- EMPLACEMENT LOGO : remplace la ligne ci-dessous par
-               <img src="documents/logo.png" alt="Logo" class="footer-logo-img">
-               (ou le nom de ton image) -->
-          <div class="footer-logo-placeholder" aria-hidden="true">LOGO</div>
+          <img src="documents/logo.png" alt="Logo" class="footer-logo-img" onerror="this.onerror=null;this.src='logo.png';">
           <p class="footer-title">Les services de l'État<br>en Martinique</p>
         </div>
         <ul class="footer-links">
