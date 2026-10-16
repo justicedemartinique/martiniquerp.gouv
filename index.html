@@ -244,7 +244,6 @@
     display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
     gap: 20px 40px; padding-bottom: 28px; border-bottom: 1px solid var(--border-dim);
   }
-  .footer-title { margin: 0; font-size: 16px; font-weight: 700; line-height: 1.3; }
   .footer-brand { display: flex; align-items: center; flex-wrap: wrap; gap: 16px 20px; }
   .footer-logo-placeholder {
     width: 170px; height: 110px; flex: none; border: 2px dashed var(--border-dim); border-radius: 4px;
@@ -267,6 +266,9 @@
     .logo-placeholder { width: 100px; height: 60px; }
     .header-logo-img { height: 60px; }
   }
+
+  /* Titres des menus déroulants : texte simple (sans lien) */
+  .fr-mega-menu__category { font-size: 15px; font-weight: 700; line-height: 1.3; color: var(--text-primary); }
 </style>
 </head>
 <body>
@@ -318,7 +320,7 @@
                   <a class="fr-link" href="#">Voir toute la rubrique →</a>
                 </div>
                 <div class="fr-mega-menu__category-col">
-                  <h5 class="fr-mega-menu__category"><a class="fr-nav__link" href="#">À la une</a></h5>
+                  <h5 class="fr-mega-menu__category">À la une</h5>
                   <ul class="fr-mega-menu__list">
                     <li><a class="fr-nav__link" href="communiques-presse.html">Communiqués de presse</a></li>
                     <li><a class="fr-nav__link" href="breves.html">Brèves</a></li>
@@ -341,7 +343,7 @@
                   <a class="fr-link" href="#">Voir toute la rubrique →</a>
                 </div>
                 <div class="fr-mega-menu__category-col">
-                  <h5 class="fr-mega-menu__category"><a class="fr-nav__link" href="#">Nos services</a></h5>
+                  <h5 class="fr-mega-menu__category">Nos services</h5>
                   <ul class="fr-mega-menu__list">
                     <li><a class="fr-nav__link" href="prefecture-martinique.html">Préfecture de la Martinique</a></li>
                     <li><a class="fr-nav__link" href="organigrammes.html">Organigrammes</a></li>
@@ -364,7 +366,7 @@
                   <a class="fr-link" href="#">Voir toute la rubrique →</a>
                 </div>
                 <div class="fr-mega-menu__category-col">
-                  <h5 class="fr-mega-menu__category"><a class="fr-nav__link" href="#">Documents officiels</a></h5>
+                  <h5 class="fr-mega-menu__category">Documents officiels</h5>
                   <ul class="fr-mega-menu__list">
                     <li><a class="fr-nav__link" href="recueil-actes-administratifs.html">Recueil des actes administratifs</a></li>
                     <li><a class="fr-nav__link" href="#">Recrutement</a></li>
@@ -387,7 +389,7 @@
                   <a class="fr-link" href="#">Voir toute la rubrique →</a>
                 </div>
                 <div class="fr-mega-menu__category-col">
-                  <h5 class="fr-mega-menu__category"><a class="fr-nav__link" href="#">Démarches courantes</a></h5>
+                  <h5 class="fr-mega-menu__category">Démarches courantes</h5>
                   <ul class="fr-mega-menu__list">
                     <li><a class="fr-nav__link" href="demarches-permis-arme.html">Permis de détention d'arme</a></li>
                     <li><a class="fr-nav__link" href="demarches-manifestation.html">Manifestation</a></li>
@@ -434,7 +436,6 @@
       <div class="footer-top">
         <div class="footer-brand">
           <img src="documents/logo.png" alt="Logo" class="footer-logo-img" onerror="this.onerror=null;this.src='logo.png';">
-          <p class="footer-title">Les services de l'État<br>en Martinique</p>
         </div>
         <ul class="footer-links">
           <li><a href="https://www.info.gouv.fr" target="_blank" rel="noopener noreferrer" title="info.gouv.fr — nouvelle fenêtre">info.gouv.fr <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg></a></li>
