@@ -310,6 +310,11 @@
 
   /* Titres des menus déroulants : texte simple (sans lien) */
   .fr-mega-menu__category { font-size: 15px; font-weight: 700; line-height: 1.3; color: var(--text-primary); }
+
+  /* Deux logos : logo-sombre.png (thème sombre) et logo-clair.png (thème clair) */
+  .logo-for-light { display: none; }
+  :root[data-theme="light"] .logo-for-dark { display: none; }
+  :root[data-theme="light"] .logo-for-light { display: block; }
 </style>
 </head>
 <body>
@@ -320,7 +325,8 @@
         <div class="fr-header__body-row">
 
           <div class="fr-header__identity">
-            <img src="documents/logo.png" alt="Logo" class="header-logo-img" onerror="this.onerror=null;this.src='logo.png';">
+            <img src="documents/logo-sombre.png" alt="Logo" class="header-logo-img logo-for-dark" data-f="logo-sombre.png|documents/logo.png|logo.png" onerror="var s=this.dataset.f.split('|'),i=+(this.dataset.i||0);if(i<s.length){this.dataset.i=i+1;this.src=s[i];}else{this.onerror=null;}">
+            <img src="documents/logo-clair.png" alt="Logo" class="header-logo-img logo-for-light" data-f="logo-clair.png|documents/logo.png|logo.png" onerror="var s=this.dataset.f.split('|'),i=+(this.dataset.i||0);if(i<s.length){this.dataset.i=i+1;this.src=s[i];}else{this.onerror=null;}">
             <a href="index.html" class="fr-header__brand-link" title="Accueil - Préfecture RP de Martinique">
               <p class="fr-logo">Les services de l'État<br>en Martinique</p>
             </a>
@@ -358,7 +364,6 @@
                 <div class="fr-mega-menu__leader">
                   <h4 class="fr-h4">Actualités</h4>
                   <p>Toute l'actualité de la préfecture : annonces officielles et informations brèves.</p>
-                  <a class="fr-link" href="#">Voir toute la rubrique →</a>
                 </div>
                 <div class="fr-mega-menu__category-col">
                   <h5 class="fr-mega-menu__category">À la une</h5>
@@ -381,7 +386,6 @@
                 <div class="fr-mega-menu__leader">
                   <h4 class="fr-h4">Services de l'État</h4>
                   <p>Organisation et fonctionnement des services de la préfecture en Martinique.</p>
-                  <a class="fr-link" href="#">Voir toute la rubrique →</a>
                 </div>
                 <div class="fr-mega-menu__category-col">
                   <h5 class="fr-mega-menu__category">Nos services</h5>
@@ -404,7 +408,6 @@
                 <div class="fr-mega-menu__leader">
                   <h4 class="fr-h4">Publications</h4>
                   <p>Documents officiels publiés par la préfecture et offres d'emploi.</p>
-                  <a class="fr-link" href="#">Voir toute la rubrique →</a>
                 </div>
                 <div class="fr-mega-menu__category-col">
                   <h5 class="fr-mega-menu__category">Documents officiels</h5>
@@ -427,7 +430,6 @@
                 <div class="fr-mega-menu__leader">
                   <h4 class="fr-h4">Démarches</h4>
                   <p>Effectuez vos démarches administratives directement en ligne.</p>
-                  <a class="fr-link" href="#">Voir toute la rubrique →</a>
                 </div>
                 <div class="fr-mega-menu__category-col">
                   <h5 class="fr-mega-menu__category">Démarches courantes</h5>
@@ -553,7 +555,8 @@
     <div class="footer-inner">
       <div class="footer-top">
         <div class="footer-brand">
-          <img src="documents/logo.png" alt="Logo" class="footer-logo-img" onerror="this.onerror=null;this.src='logo.png';">
+          <img src="documents/logo-sombre.png" alt="Logo" class="footer-logo-img logo-for-dark" data-f="logo-sombre.png|documents/logo.png|logo.png" onerror="var s=this.dataset.f.split('|'),i=+(this.dataset.i||0);if(i<s.length){this.dataset.i=i+1;this.src=s[i];}else{this.onerror=null;}">
+          <img src="documents/logo-clair.png" alt="Logo" class="footer-logo-img logo-for-light" data-f="logo-clair.png|documents/logo.png|logo.png" onerror="var s=this.dataset.f.split('|'),i=+(this.dataset.i||0);if(i<s.length){this.dataset.i=i+1;this.src=s[i];}else{this.onerror=null;}">
         </div>
         <ul class="footer-links">
           <li><a href="https://www.info.gouv.fr" target="_blank" rel="noopener noreferrer" title="info.gouv.fr — nouvelle fenêtre">info.gouv.fr <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg></a></li>
